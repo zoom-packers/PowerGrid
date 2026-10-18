@@ -17,13 +17,10 @@
 package org.patryk3211.powergrid.kinetics.punchcard;
 
 import com.zurrtum.create.client.catnip.gui.widget.AbstractSimiWidget;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 
-@Environment(EnvType.CLIENT)
 public class PunchCardButton extends AbstractSimiWidget {
     private final byte[] dataRef;
     private final int row, column;

@@ -17,21 +17,21 @@
 package org.patryk3211.powergrid;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLevelEvents;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.event.player.UseEntityCallback;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.SubmitCustomGeometryEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import org.patryk3211.powergrid.neoforge.client.ClientRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
+import org.patryk3211.powergrid.PowerGrid;
 import org.patryk3211.powergrid.collections.ModPackets;
 import org.patryk3211.powergrid.collections.ModdedConfigs;
 import org.patryk3211.powergrid.collections.ModdedKeys;
@@ -49,51 +49,83 @@ import org.patryk3211.powergrid.network.packets.EntityDataS2CPacket;
 import org.patryk3211.powergrid.network.packets.NegotiateSyncC2SPacket;
 import org.patryk3211.powergrid.utility.PlacementOverlay;
 
-@Environment(EnvType.CLIENT)
 public class PowerGridClientEvents {
     private static boolean alternatePlacementDown;
 
+    // NeoForge: Fabric's client lifecycle, tick, tooltip, interaction, HUD and level-render callbacks became the
+    // NeoForge events below. SubmitCustomGeometryEvent fires at the end of LevelRenderer#submitFeatures with that
+    // method's identity PoseStack, where Fabric's LevelRenderEvents.COLLECT_SUBMITS was injected.
     public static void register() {
         ModdedKeys.register();
         ModPackets.PACKETS.registerS2CListener();
 
-        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> negotiateSync());
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+        var bus = NeoForge.EVENT_BUS;
+        bus.addListener((ClientPlayerNetworkEvent.LoggingIn event) -> negotiateSync());
+        bus.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> {
+            var client = Minecraft.getInstance();
             ClientElectricNetwork.unloadWorld(client, client.level);
             EntityDataS2CPacket.reset();
             ServerConfigSync.restore();
         });
-        ClientLevelEvents.AFTER_CLIENT_LEVEL_CHANGE.register((client, level) -> {
-            ClientElectricNetwork.levelChanged(client, level);
-            EntityDataS2CPacket.reset();
+        bus.addListener((LevelEvent.Load event) -> {
+            if (event.getLevel() instanceof ClientLevel level) {
+                ClientElectricNetwork.levelChanged(Minecraft.getInstance(), level);
+                EntityDataS2CPacket.reset();
+            }
         });
 
-        ClientTickEvents.START_LEVEL_TICK.register(GlobalElectricNetworks::preTick);
-        ClientTickEvents.END_LEVEL_TICK.register(TerminalHandler::tick);
-        ClientTickEvents.END_CLIENT_TICK.register(PowerGridClientEvents::clientTick);
-
-        ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
-            WireItem.tooltip(stack, lines, context, flag);
-            PowerGridTooltipModifiers.appendElectricProperties(stack, flag, lines);
+        bus.addListener((LevelTickEvent.Pre event) -> {
+            if (event.getLevel() instanceof ClientLevel level)
+                GlobalElectricNetworks.preTick(level);
         });
-        ClientEntityEvents.ENTITY_LOAD.register((entity, level) -> EntityDataS2CPacket.clientEntityAdded(entity));
+        bus.addListener((LevelTickEvent.Post event) -> {
+            if (event.getLevel() instanceof ClientLevel level)
+                TerminalHandler.tick(level);
+        });
+        bus.addListener((ClientTickEvent.Post event) -> clientTick(Minecraft.getInstance()));
 
-        UseBlockCallback.EVENT.register((player, level, hand, hit) -> cutClear(level));
-        UseEntityCallback.EVENT.register((player, level, hand, entity, hit) -> cutClear(level));
-        UseItemCallback.EVENT.register((player, level, hand) -> cutClear(level));
+        bus.addListener((ItemTooltipEvent event) -> {
+            var stack = event.getItemStack();
+            var lines = event.getToolTip();
+            WireItem.tooltip(stack, lines, event.getContext(), event.getFlags());
+            PowerGridTooltipModifiers.appendElectricProperties(stack, event.getFlags(), lines);
+        });
+        bus.addListener((EntityJoinLevelEvent event) -> {
+            if (event.getLevel().isClientSide())
+                EntityDataS2CPacket.clientEntityAdded(event.getEntity());
+        });
 
-        HudElementRegistry.addLast(PowerGrid.asResource("placement_overlay"),
+        bus.addListener((PlayerInteractEvent.RightClickBlock event) -> {
+            if (cutClear(event.getLevel()) != InteractionResult.PASS) {
+                event.setCancellationResult(InteractionResult.FAIL);
+                event.setCanceled(true);
+            }
+        });
+        bus.addListener((PlayerInteractEvent.EntityInteract event) -> {
+            if (cutClear(event.getLevel()) != InteractionResult.PASS) {
+                event.setCancellationResult(InteractionResult.FAIL);
+                event.setCanceled(true);
+            }
+        });
+        bus.addListener((PlayerInteractEvent.RightClickItem event) -> {
+            if (cutClear(event.getLevel()) != InteractionResult.PASS) {
+                event.setCancellationResult(InteractionResult.FAIL);
+                event.setCanceled(true);
+            }
+        });
+
+        ClientRegistration.guiLayerAboveAll(PowerGrid.asResource("placement_overlay"),
                 (extractor, delta) -> PlacementOverlay.renderOverlay(extractor));
 
-        LevelRenderEvents.COLLECT_SUBMITS.register(context -> {
+        bus.addListener((SubmitCustomGeometryEvent event) -> {
             var client = Minecraft.getInstance();
             if(client.level == null || client.player == null)
                 return;
-            var cameraPos = context.levelState().cameraRenderState.pos;
+            var cameraPos = event.getLevelRenderState().cameraRenderState.pos;
             if(cameraPos == null)
                 return;
-            WirePreview.render(context.poseStack(), context.submitNodeCollector(), client.level, client.player, cameraPos);
-            MultimeterItemRenderer.render(context.poseStack(), context.submitNodeCollector(), client.level, client.player, cameraPos);
+            WirePreview.render(event.getPoseStack(), event.getSubmitNodeCollector(), client.level, client.player, cameraPos);
+            MultimeterItemRenderer.render(event.getPoseStack(), event.getSubmitNodeCollector(), client.level, client.player, cameraPos);
         });
     }
 
@@ -102,7 +134,7 @@ public class PowerGridClientEvents {
     }
 
     /**
-     * Fabric has no raw key or mouse event, so the alternate placement modifier is edge polled
+     * Fabric had no raw key or mouse event, so the alternate placement modifier is edge polled
      * once a tick and fed to the same handler the raw input event used to call.
      */
     private static void clientTick(Minecraft client) {

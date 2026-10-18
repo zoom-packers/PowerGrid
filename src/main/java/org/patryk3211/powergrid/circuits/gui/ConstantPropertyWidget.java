@@ -16,8 +16,6 @@
  */
 package org.patryk3211.powergrid.circuits.gui;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -27,7 +25,6 @@ import org.patryk3211.powergrid.circuits.components.properties.PropertyEntry;
 
 import static org.patryk3211.powergrid.circuits.gui.ComponentPropertiesWidget.PROPERTIES;
 
-@Environment(EnvType.CLIENT)
 public class ConstantPropertyWidget<T> extends PropertyWidget<T, PropertyEntry<T>> {
     protected ConstantPropertyWidget(Font textRenderer, int x, int y, PropertyEntry<T> property) {
         super(textRenderer, x, y, property);

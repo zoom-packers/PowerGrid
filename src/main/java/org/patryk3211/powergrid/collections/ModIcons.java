@@ -19,8 +19,6 @@ package org.patryk3211.powergrid.collections;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -28,7 +26,6 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import org.patryk3211.powergrid.PowerGrid;
 
-@Environment(EnvType.CLIENT)
 public class ModIcons extends AllIcons {
     public static final Identifier ICON_ATLAS = PowerGrid.texture("gui/icons");
     public static final int ATLAS_SIZE = 64;

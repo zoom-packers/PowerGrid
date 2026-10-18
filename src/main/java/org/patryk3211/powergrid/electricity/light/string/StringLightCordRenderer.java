@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.electricity.light.string;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -32,7 +30,6 @@ import org.patryk3211.powergrid.electricity.wire.powercord.CordRenderer;
 
 import static org.patryk3211.powergrid.electricity.wire.HangingWireRenderer.quad;
 
-@Environment(EnvType.CLIENT)
 public class StringLightCordRenderer extends CordRenderer<StringLightCordEntity, StringLightCordRenderState> {
     public static final Identifier TEXTURE = PowerGrid.texture("entity/bulb");
 

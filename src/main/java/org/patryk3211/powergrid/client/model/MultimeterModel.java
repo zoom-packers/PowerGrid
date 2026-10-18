@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.client.model;
 
 import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.client.flywheel.lib.model.baked.ItemModelRenderHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.ItemModelResolver;
@@ -41,7 +39,6 @@ import org.patryk3211.powergrid.equipment.multimeter.MultimeterItemRenderer;
 import java.util.List;
 import java.util.function.Supplier;
 
-@Environment(EnvType.CLIENT)
 public class MultimeterModel implements ItemModel {
     public static final Identifier ID = PowerGrid.asResource("model/multimeter");
     public static final Identifier ITEM_ID = PowerGrid.asResource("item/multimeter");

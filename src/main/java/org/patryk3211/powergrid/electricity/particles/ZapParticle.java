@@ -20,8 +20,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.zurrtum.create.catnip.data.Pair;
 import org.patryk3211.powergrid.compat.sable.ClientSubLevelAccess;
 import org.patryk3211.powergrid.compat.sable.SableCompanion;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -34,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public class ZapParticle extends Particle {
     private final Vec3 delta;
     private final Vec3 cross1;
@@ -168,7 +165,6 @@ public class ZapParticle extends Particle {
         return ZapParticleGroup.ZAP;
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Factory implements ParticleProvider<ZapParticleData> {
         @Override
         public Particle createParticle(ZapParticleData data, ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, RandomSource random) {

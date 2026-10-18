@@ -22,14 +22,11 @@ import com.zurrtum.create.catnip.math.Pointing;
 import com.zurrtum.create.catnip.math.VecHelper;
 import com.zurrtum.create.client.flywheel.lib.transform.TransformStack;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.ValueBoxTransform;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.patryk3211.powergrid.electricity.solarpanel.SolarPanelBearingBlock;
 
-@Environment(EnvType.CLIENT)
 public class SolarPanelBearingBoxTransform extends ValueBoxTransform.Sided {
     @Override
     public float getScale() {

@@ -28,7 +28,7 @@ import org.patryk3211.powergrid.electricity.base.ProxyElectricBehaviour;
 import org.patryk3211.powergrid.electricity.febridge.IFEBridgeHandler;
 import org.patryk3211.powergrid.electricity.sim.ElectricWire;
 
-import team.reborn.energy.api.EnergyStorage;
+import net.neoforged.neoforge.capabilities.Capabilities;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -169,7 +169,7 @@ public class BridgeElectricBehaviour extends ProxyElectricBehaviour {
 
     public static IFEBridgeHandler makeFEHandler(BlockEntity be) {
         var facing = be.getBlockState().getValue(DeviceConnectorBlock.FACING);
-        var energyStorage = EnergyStorage.SIDED.find(be.getLevel(), be.getBlockPos().relative(facing), facing.getOpposite());
+        var energyStorage = be.getLevel().getCapability(Capabilities.Energy.BLOCK, be.getBlockPos().relative(facing), facing.getOpposite());
         if(energyStorage != null) {
             return new FEBridgeEnergyStorage(be);
         }

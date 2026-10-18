@@ -1,13 +1,16 @@
 import java.util.zip.ZipFile
 import javax.imageio.ImageIO
 
+// NeoForge 26.3 build of Power Grid for Zoompack 5, against ZP5's NeoForge port of Create Fly.
+// See PORTING.md. Mirrors ZP5's mods/build-logic zp5.neoforge-mod convention (ModDevGradle 2.0.148).
 plugins {
-    id("net.fabricmc.fabric-loom") version "1.16-SNAPSHOT"
-    `maven-publish`
+    `java-library`
+    idea
+    id("net.neoforged.moddev") version "2.0.148"
 }
 
 group = property("maven_group") as String
-version = "${property("mod_version")}+fly-mc${property("mc_line")}"
+version = "${property("mod_version")}+${property("port_suffix")}"
 
 base {
     archivesName.set(property("archives_base_name") as String)
@@ -15,71 +18,104 @@ base {
 
 repositories {
     mavenCentral()
-    maven("https://maven.fabricmc.net/")
-    maven("https://api.modrinth.com/maven") {
-        content { includeGroup("maven.modrinth") }
-    }
-    maven("https://maven.modmuss50.me/") {
-        content { includeGroup("teamreborn") }
-    }
-    maven("https://maven.shedaniel.me/") {
-        content { includeGroup("me.shedaniel.cloth") }
+    exclusiveContent {
+        forRepository { maven("https://api.modrinth.com/maven") }
+        filter { includeGroup("maven.modrinth") }
     }
 }
 
-// The recipe viewer is nested into this jar and compiled against: CI downloads its release
-// jar into libs/, a local checkout uses the sibling repo's build output.
-repositories {
-    flatDir {
-        dirs("libs", "../../create-rei/CreateReiViewer-Fly/build/libs")
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(25))
+
+sourceSets {
+    main {
+        resources.srcDir("src/generated/resources")
+        java {
+            // Fabric entrypoints, replaced by org/patryk3211/powergrid/neoforge/** (see PORTING.md)
+            exclude("org/patryk3211/powergrid/fabric/**")
+            // REI / Create REI Viewer plugins: REI has no NeoForge 26.3 build in the pack (JEI is a TODO)
+            exclude("org/patryk3211/powergrid/compat/rei/**")
+            exclude("org/patryk3211/powergrid/compat/viewer/**")
+            exclude("org/patryk3211/powergrid/compat/fabric/**")
+            // Farmer's Delight has no NeoForge 26.3 build in the pack
+            exclude("org/patryk3211/powergrid/compat/farmersdelight/**")
+            exclude("org/patryk3211/powergrid/mixin/compat/farmersdelight/**")
+        }
+        resources {
+            exclude("fabric.mod.json")
+            exclude("powergrid.accesswidener")
+            exclude("powergrid.farmersdelight.mixins.json")
+        }
     }
 }
-val recipeViewer = ":CreateReiViewer:${property("createreiviewer_version")}"
 
-loom {
-    accessWidenerPath = file("src/main/resources/powergrid.accesswidener")
+val localRuntime: Configuration by configurations.creating
+configurations.runtimeClasspath.get().extendsFrom(localRuntime)
+
+val createJar = files(property("create_jar") as String)
+
+neoForge {
+    version = property("neo_version") as String
+
+    accessTransformers {
+        from(file("src/main/resources/META-INF/accesstransformer.cfg"))
+        // Create's own widenings, which it applies at runtime too
+        from(file("libs/create-accesstransformer.cfg"))
+    }
+    // Create's compile-time view of the interfaces its mixins add to Container / WorldlyContainer
+    interfaceInjectionData {
+        from(file("libs/interfaces.json"))
+    }
+
     mods {
         create("powergrid") {
             sourceSet(sourceSets.main.get())
         }
     }
-}
 
-sourceSets {
-    main {
-        resources.srcDir("src/generated/resources")
+    // JUnit tests (electric solver, recipe codec) compile and run against Minecraft on a plain classpath, as on
+    // Fabric Loom. MDG's FML unit-test launcher (junit-fml 12) fails to start on this setup.
+    addModdingDependenciesTo(sourceSets.test.get())
+
+    runs {
+        create("client") {
+            client()
+            systemProperty("neoforge.enabledGameTestNamespaces", "powergrid")
+        }
+        create("server") {
+            server()
+            programArgument("--nogui")
+            systemProperty("neoforge.enabledGameTestNamespaces", "powergrid")
+        }
+        create("gameTestServer") {
+            type = "gameTestServer"
+            systemProperty("neoforge.enabledGameTestNamespaces", "powergrid")
+        }
+        configureEach {
+            systemProperty("forge.logging.markers", "REGISTRIES")
+            logLevel = org.slf4j.event.Level.INFO
+            if (project.hasProperty("mixinDebug")) {
+                systemProperty("mixin.debug.verbose", "true")
+                systemProperty("mixin.debug.export", "true")
+            }
+        }
     }
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
-    implementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
-    implementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
-    implementation("maven.modrinth:create-fly:${property("create_fabric_version")}")
-    implementation(include("teamreborn:energy:${property("team_reborn_energy_version")}")!!)
+    implementation(createJar)
 
     val ejml = property("ejml_version")
-    include(implementation("org.ejml:ejml-core:$ejml")!!)
-    include(implementation("org.ejml:ejml-simple:$ejml")!!)
-    include(implementation("org.ejml:ejml-ddense:$ejml")!!)
-    include(implementation("org.ejml:ejml-dsparse:$ejml")!!)
+    for (module in listOf("ejml-core", "ejml-simple", "ejml-ddense", "ejml-dsparse")) {
+        implementation("org.ejml:$module:$ejml")
+        jarJar("org.ejml:$module:$ejml")
+    }
 
-    compileOnly(recipeViewer)
-    include(recipeViewer)
-    compileOnly("maven.modrinth:rei:${property("rei_version")}")
-    compileOnly("maven.modrinth:farmers-delight-refabricated:${property("farmers_delight_version")}")
+    // Iris shader compat (IrisPipelineCompat), only used when Iris is installed
     compileOnly("maven.modrinth:iris:${property("iris_version")}")
-    compileOnly("me.shedaniel.cloth:basic-math:${property("basic_math_version")}")
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter:${property("junit_version")}")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_25
-    targetCompatibility = JavaVersion.VERSION_25
-    withSourcesJar()
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -88,9 +124,29 @@ tasks.withType<JavaCompile>().configureEach {
     options.compilerArgs.addAll(listOf("-Xmaxerrs", "10000", "-Xmaxwarns", "1000"))
 }
 
+java {
+    withSourcesJar()
+}
+
 tasks.withType<AbstractCopyTask>().configureEach {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
+// Expands ${...} placeholders in src/main/templates (neoforge.mods.toml) from gradle.properties.
+val generateModMetadata = tasks.register<ProcessResources>("generateModMetadata") {
+    val replaceProperties = mapOf(
+        "minecraft_version_range" to project.property("minecraft_version_range") as String,
+        "neo_version_range" to project.property("neo_version_range") as String,
+        "create_version_range" to project.property("create_version_range") as String,
+        "mod_version" to project.version.toString(),
+    )
+    inputs.properties(replaceProperties)
+    expand(replaceProperties)
+    from("src/main/templates")
+    into(layout.buildDirectory.dir("generated/sources/modMetadata"))
+}
+sourceSets.main.get().resources.srcDir(generateModMetadata)
+neoForge.ideSyncTask(generateModMetadata)
 
 val generatedConnectedTextureResources = layout.buildDirectory.dir("generated/connected-texture-resources")
 
@@ -155,21 +211,13 @@ tasks.processResources {
     from(generatedConnectedTextureResources)
     exclude(connectedTextureSheets.keys - sheetsSampledByModels)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    val modMetadata = mapOf(
-        "version" to project.version.toString(),
-        "mc_line" to project.property("mc_line") as String,
-        "minecraft_dependency_version" to project.property("minecraft_dependency_version") as String,
-        "fabric_loader_version" to project.property("fabric_loader_version") as String,
-        "create_fabric_version_range" to project.property("create_fabric_version_range") as String,
-    )
-    inputs.properties(modMetadata)
-    filesMatching("fabric.mod.json") {
-        expand(modMetadata)
-    }
 }
 
 tasks.test {
     useJUnitPlatform()
+    // Needs a running FML loader (SharedConstants -> FMLEnvironment); the content_registered GameTest checks that the
+    // shipped light_cord_patterning recipe loads instead
+    exclude("org/patryk3211/recipe/**")
 }
 
 tasks.jar {

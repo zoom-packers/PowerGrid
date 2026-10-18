@@ -17,8 +17,6 @@
 
 package org.patryk3211.powergrid.circuits.client;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -31,7 +29,6 @@ import org.patryk3211.powergrid.circuits.schematic.CircuitSchematicRender;
 
 import static org.patryk3211.powergrid.circuits.schematic.CircuitLayer.GRID_TO_GRID_SCALE;
 
-@Environment(EnvType.CLIENT)
 public class FootprintRenderer {
     private static final Identifier ARROWS = PowerGrid.texture("gui/circuit_arrows");
 

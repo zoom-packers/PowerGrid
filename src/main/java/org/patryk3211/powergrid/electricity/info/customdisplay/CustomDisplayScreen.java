@@ -22,8 +22,6 @@ import com.zurrtum.create.client.foundation.gui.menu.AbstractSimiContainerScreen
 import com.zurrtum.create.client.foundation.gui.widget.IconButton;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import com.zurrtum.create.foundation.gui.menu.MenuType;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
@@ -48,7 +46,6 @@ import org.patryk3211.powergrid.utility.Unit;
 import java.util.Arrays;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public class CustomDisplayScreen extends AbstractSimiContainerScreen<CustomDisplayMenu> {
     protected static final Identifier TEXTURE = PowerGrid.texture("gui/custom_display");
     private static final int TEXTURE_SIZE = 256;

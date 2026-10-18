@@ -8,6 +8,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.core.BlockPos;
+import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.state.BlockState;
 import org.patryk3211.powergrid.collections.ModdedPackets;
 import org.patryk3211.powergrid.equipment.ItemBoostUtils;
@@ -104,8 +106,10 @@ public abstract class PlayerDrillMixin extends LivingEntity implements PlayerDri
             powerGrid$drillSpeed = maxLevel;
     }
 
-    @Inject(method = "getDestroySpeed", at = @At("RETURN"), cancellable = true)
-    private void powerGrid$adjustDrillDigSpeed(BlockState state, CallbackInfoReturnable<Float> cir) {
+    // NeoForge: the one-argument getDestroySpeed only delegates to the position-aware overload, which is what
+    // BlockBehaviour#getDestroyProgress calls
+    @Inject(method = "getDestroySpeed(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)F", at = @At("RETURN"), cancellable = true)
+    private void powerGrid$adjustDrillDigSpeed(BlockState state, @Nullable BlockPos pos, CallbackInfoReturnable<Float> cir) {
         var stack = getItemBySlot(EquipmentSlot.MAINHAND);
         if(!(stack.getItem() instanceof DrillItem) || !DrillItem.canMine(state))
             return;

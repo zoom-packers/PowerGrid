@@ -20,8 +20,6 @@ import com.zurrtum.create.content.schematics.requirement.ItemRequirement;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.CenteredSideValueBoxTransform;
 import com.zurrtum.create.catnip.math.VecHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -66,7 +64,6 @@ public class FuseHolderBlockEntity extends ElectricBlockEntity {
         fuseWire = builder.connectSwitch(resistance(), builder.terminalNode(0), builder.terminalNode(1), state == FuseState.CLOSED);
     }
 
-    @Environment(EnvType.CLIENT)
     public void playEffect() {
         if(level == null)
             return;

@@ -17,8 +17,6 @@
 package org.patryk3211.powergrid.electricity.wire;
 
 import org.patryk3211.powergrid.utility.Env;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -346,7 +344,6 @@ public class WireItem extends Item implements IWire {
             cord.appendProperties(stack, player, tooltip);
     };
 
-    @Environment(EnvType.CLIENT)
     public static void tooltip(ItemStack stack, List<Component> components, TooltipContext tooltipContext, TooltipFlag tooltipFlag) {
         var entry = WireRegistry.forItem(stack.getItem());
         if(entry == null)

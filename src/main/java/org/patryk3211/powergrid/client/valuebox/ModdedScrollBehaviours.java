@@ -26,8 +26,6 @@ import com.zurrtum.create.client.foundation.gui.AllIcons;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import com.zurrtum.create.foundation.blockEntity.behaviour.ValueSettings;
 import com.zurrtum.create.foundation.blockEntity.behaviour.scrollValue.ServerScrollValueBehaviour;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
@@ -39,7 +37,6 @@ import org.patryk3211.powergrid.utility.Lang;
 import org.patryk3211.powergrid.utility.NumberFormats;
 import org.patryk3211.powergrid.utility.Unit;
 
-@Environment(EnvType.CLIENT)
 public class ModdedScrollBehaviours {
     public static class Trim extends ScrollValueBehaviour<SmartBlockEntity, ServerScrollValueBehaviour> {
         public Trim(SmartBlockEntity be) {

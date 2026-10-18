@@ -17,8 +17,6 @@
 package org.patryk3211.powergrid.collections;
 
 import com.zurrtum.create.client.AllMenuScreens;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.patryk3211.powergrid.circuits.editor.CircuitDesignTableEditScreen;
 import org.patryk3211.powergrid.circuits.editor.CircuitDesignTableLoadScreen;
 import org.patryk3211.powergrid.circuits.editor.CircuitDesignTableScreen;
@@ -26,7 +24,6 @@ import org.patryk3211.powergrid.electricity.gauge.EnergyMeterScreen;
 import org.patryk3211.powergrid.electricity.info.customdisplay.CustomDisplayScreen;
 import org.patryk3211.powergrid.kinetics.punchcard.PunchCardScreen;
 
-@Environment(EnvType.CLIENT)
 public class ModdedMenuScreens {
     public static void register() {
         AllMenuScreens.register(ModdedMenus.PUNCH_CARD, PunchCardScreen::create);

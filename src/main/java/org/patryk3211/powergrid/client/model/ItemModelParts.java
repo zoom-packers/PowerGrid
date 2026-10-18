@@ -17,8 +17,6 @@
 package org.patryk3211.powergrid.client.model;
 
 import com.google.common.base.Suppliers;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
 import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
 import net.minecraft.client.renderer.item.ModelRenderProperties;
@@ -30,7 +28,6 @@ import org.joml.Vector3fc;
 import java.util.List;
 import java.util.function.Supplier;
 
-@Environment(EnvType.CLIENT)
 public record ItemModelParts(List<BakedQuad> quads, ModelRenderProperties properties) {
     public static ItemModelParts of(ModelBaker baker, Identifier model) {
         var resolved = baker.getModel(model);

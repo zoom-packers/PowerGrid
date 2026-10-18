@@ -16,8 +16,6 @@
  */
 package org.patryk3211.powergrid.electricity.battery;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import com.zurrtum.create.api.connectivity.ConnectivityHandler;
 import com.zurrtum.create.client.foundation.block.connected.AllCTTypes;
 import com.zurrtum.create.client.foundation.block.connected.CTSpriteShiftEntry;
@@ -31,7 +29,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import org.patryk3211.powergrid.PowerGrid;
 
-@Environment(EnvType.CLIENT)
 public class BatteryCTBehaviour extends ConnectedTextureBehaviour.Base {
     private static final CTSpriteShiftEntry TOP_BOTTOM = CTSpriteShifter.getCT(
             AllCTTypes.RECTANGLE,

@@ -16,16 +16,19 @@
  */
 package org.patryk3211.powergrid.electricity.deviceconnector;
 
-import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.TransferPreconditions;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
+import net.neoforged.neoforge.transfer.energy.EnergyHandlerUtil;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.patryk3211.powergrid.electricity.febridge.IFEBridgeHandler;
-import team.reborn.energy.api.EnergyStorage;
-import team.reborn.energy.api.EnergyStorageUtil;
 
-public class FEBridgeEnergyStorage extends SnapshotParticipant<Long> implements EnergyStorage, IFEBridgeHandler {
+// NeoForge: Team Reborn Energy's EnergyStorage became NeoForge's EnergyHandler (same FE units, int amounts per
+// operation); Fabric's SnapshotParticipant became SnapshotJournal.
+public class FEBridgeEnergyStorage extends SnapshotJournal<Long> implements EnergyHandler, IFEBridgeHandler {
     private final BlockEntity be;
     public long capacity;
     public long amount;
@@ -40,47 +43,48 @@ public class FEBridgeEnergyStorage extends SnapshotParticipant<Long> implements 
     }
 
     @Override
-    protected void readSnapshot(Long snapshot) {
+    protected void revertToSnapshot(Long snapshot) {
         this.amount = snapshot;
     }
 
     @Override
-    protected void onFinalCommit() {
+    protected void onRootCommit(Long originalState) {
         be.setChanged();
     }
 
     @Override
-    public boolean supportsInsertion() {
-        return false;
-    }
-
-    @Override
-    public long insert(long l, TransactionContext transactionContext) {
+    public int insert(int amount, TransactionContext transaction) {
         // Insertion not allowed
+        TransferPreconditions.checkNonNegative(amount);
         return 0;
     }
 
     @Override
-    public long extract(long maxAmount, TransactionContext transaction) {
-        StoragePreconditions.notNegative(maxAmount);
-        long extracted = Math.min(maxAmount, this.amount);
-        if(extracted > 0L) {
+    public int extract(int maxAmount, TransactionContext transaction) {
+        TransferPreconditions.checkNonNegative(maxAmount);
+        int extracted = (int) Math.min(maxAmount, this.amount);
+        if(extracted > 0) {
             this.updateSnapshots(transaction);
             this.amount -= extracted;
             return extracted;
         } else {
-            return 0L;
+            return 0;
         }
+    }
+
+    @Override
+    public long getAmountAsLong() {
+        return amount;
+    }
+
+    @Override
+    public long getCapacityAsLong() {
+        return capacity;
     }
 
     @Override
     public long getAmount() {
         return amount;
-    }
-
-    @Override
-    public long getCapacity() {
-        return capacity;
     }
 
     @Override
@@ -93,8 +97,8 @@ public class FEBridgeEnergyStorage extends SnapshotParticipant<Long> implements 
         if(amount > 0) {
             // Try to move energy
             var facing = be.getBlockState().getValue(BlockStateProperties.FACING);
-            var sideStorage = EnergyStorage.SIDED.find(be.getLevel(), be.getBlockPos().relative(facing), facing.getOpposite());
-            return EnergyStorageUtil.move(this, sideStorage, Long.MAX_VALUE, null);
+            var sideStorage = be.getLevel().getCapability(Capabilities.Energy.BLOCK, be.getBlockPos().relative(facing), facing.getOpposite());
+            return EnergyHandlerUtil.move(this, sideStorage, Integer.MAX_VALUE, null);
         }
         return 0;
     }

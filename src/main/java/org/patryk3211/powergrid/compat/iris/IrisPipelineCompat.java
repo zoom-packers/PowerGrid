@@ -15,16 +15,13 @@
  */
 package org.patryk3211.powergrid.compat.iris;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import net.irisshaders.iris.api.v0.IrisApi;
 import net.irisshaders.iris.api.v0.IrisProgram;
 import net.irisshaders.iris.api.v0.IrisShadowProgram;
 import org.patryk3211.powergrid.PowerGrid;
 import org.patryk3211.powergrid.collections.ModdedRenderLayers;
 
-@Environment(EnvType.CLIENT)
 public final class IrisPipelineCompat {
     private static final int PIPELINE_API_REVISION = 3;
     private static final int SHADOW_PIPELINE_API_REVISION = 4;

@@ -16,12 +16,11 @@
  */
 package org.patryk3211.powergrid.circuits.editor;
 
+import com.mojang.blaze3d.Blaze3D;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
 import com.zurrtum.create.client.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.zurrtum.create.client.foundation.gui.widget.IconButton;
 import com.zurrtum.create.foundation.gui.menu.MenuType;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.KeyEvent;
@@ -55,7 +54,6 @@ import java.io.OutputStream;
 import java.nio.file.*;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public class CircuitDesignTableLoadScreen extends AbstractSimiContainerScreen<CircuitDesignTableLoadMenu> {
     private static final Identifier BACKGROUND = PowerGrid.texture("gui/circuit_design_table_load");
     private static final int TEXTURE_SIZE = 256;
@@ -185,7 +183,7 @@ public class CircuitDesignTableLoadScreen extends AbstractSimiContainerScreen<Ci
         loadBtn.setToolTip(FILE_LOAD);
 
         folderBtn = new IconButton(leftPos + 20, topPos + 23, AllIcons.I_OPEN_FOLDER);
-        folderBtn.withCallback(() -> Util.getPlatform().openFile(Paths.get("circuits/").toFile()));
+        folderBtn.withCallback(() -> Blaze3D.openPath(Paths.get("circuits/")));
 
         addRenderableWidget(cancelBtn);
         addRenderableWidget(saveBtn);

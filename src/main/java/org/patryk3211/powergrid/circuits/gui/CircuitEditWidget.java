@@ -20,8 +20,6 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.zurrtum.create.client.catnip.gui.widget.AbstractSimiWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import org.patryk3211.powergrid.circuits.client.FootprintRenderer;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -36,7 +34,6 @@ import static org.patryk3211.powergrid.circuits.schematic.CircuitSchematicRender
 import static org.patryk3211.powergrid.circuits.schematic.CircuitLayer.GRID_SIZE;
 import static org.patryk3211.powergrid.circuits.schematic.CircuitLayer.GRID_TO_GRID_SCALE;
 
-@Environment(EnvType.CLIENT)
 public class CircuitEditWidget extends AbstractSimiWidget {
     private int scale = CIRCUIT_SCALE;
 

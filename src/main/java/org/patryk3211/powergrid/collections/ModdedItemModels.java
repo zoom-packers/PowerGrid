@@ -17,15 +17,12 @@
 package org.patryk3211.powergrid.collections;
 
 import com.zurrtum.create.client.AllModels;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.patryk3211.powergrid.client.model.BoostingChipModel;
 import org.patryk3211.powergrid.client.model.DrillModel;
 import org.patryk3211.powergrid.client.model.ElectroZapperModel;
 import org.patryk3211.powergrid.client.model.MultimeterModel;
 import org.patryk3211.powergrid.client.model.ThermometerModel;
 
-@Environment(EnvType.CLIENT)
 public class ModdedItemModels {
     public static void register() {
         AllModels.register(BoostingChipModel.ID, BoostingChipModel.Unbaked.CODEC);

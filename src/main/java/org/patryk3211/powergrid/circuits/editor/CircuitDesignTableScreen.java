@@ -20,8 +20,6 @@ import com.zurrtum.create.client.foundation.gui.AllIcons;
 import com.zurrtum.create.client.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.zurrtum.create.client.foundation.gui.widget.IconButton;
 import com.zurrtum.create.foundation.gui.menu.MenuType;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Tooltip;
@@ -46,7 +44,6 @@ import static com.zurrtum.create.client.foundation.gui.AllGuiTextures.PLAYER_INV
 import static org.patryk3211.powergrid.circuits.schematic.CircuitSchematicRender.COLOR_TRACE_BACK;
 import static org.patryk3211.powergrid.circuits.schematic.CircuitSchematicRender.COLOR_TRACE_FRONT;
 
-@Environment(EnvType.CLIENT)
 public class CircuitDesignTableScreen extends AbstractSimiContainerScreen<CircuitDesignTableMenu> {
     private static final Identifier BACKGROUND = PowerGrid.texture("gui/circuit_design_table");
     private static final int TEXTURE_SIZE = 256;

@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.equipment.zapper;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -34,7 +32,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.patryk3211.powergrid.PowerGrid;
 
-@Environment(EnvType.CLIENT)
 public class ZapProjectileRenderer extends EntityRenderer<ZapProjectileEntity, ZapProjectileRenderer.ZapProjectileRenderState> {
     public static final Identifier TEXTURE = PowerGrid.texture("entity/zap_projectile");
 
@@ -92,7 +89,6 @@ public class ZapProjectileRenderer extends EntityRenderer<ZapProjectileEntity, Z
         queue.submitCustomGeometry(matrices, RenderTypes.entitySolid(TEXTURE), state::renderQuads);
     }
 
-    @Environment(EnvType.CLIENT)
     public static class ZapProjectileRenderState extends EntityRenderState {
         public final float[] vertices = new float[4 * 4 * 3];
 

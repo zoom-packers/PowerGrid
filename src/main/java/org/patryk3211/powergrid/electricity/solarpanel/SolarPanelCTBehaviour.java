@@ -1,7 +1,5 @@
 package org.patryk3211.powergrid.electricity.solarpanel;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import com.zurrtum.create.client.foundation.block.connected.AllCTTypes;
 import com.zurrtum.create.client.foundation.block.connected.CTSpriteShiftEntry;
 import com.zurrtum.create.client.foundation.block.connected.CTSpriteShifter;
@@ -14,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import org.patryk3211.powergrid.PowerGrid;
 
-@Environment(EnvType.CLIENT)
 public class SolarPanelCTBehaviour extends ConnectedTextureBehaviour.Base {
     private static final CTSpriteShiftEntry TOP = CTSpriteShifter.getCT(
             AllCTTypes.OMNIDIRECTIONAL,

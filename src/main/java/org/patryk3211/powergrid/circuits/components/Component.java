@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.circuits.components;
 
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -80,7 +78,6 @@ public abstract class Component {
         return new ConstantProperty(PowerGrid.MOD_ID, "voltage", Unit.VOLTAGE.formatWithPrefixes(value).component());
     }
 
-    @Environment(EnvType.CLIENT)
     public static void modelChanged(BlockPos pos) {
         var level = Minecraft.getInstance().level;
         if(level == null)
@@ -147,13 +144,11 @@ public abstract class Component {
     }
 
     @NotNull
-    @Environment(EnvType.CLIENT)
     public Identifier getModelId(@NotNull PlacedComponent component) {
         return ComponentRegistry.getId(this);
     }
 
     @NotNull
-    @Environment(EnvType.CLIENT)
     public Collection<Identifier> requestedModels() {
         return List.of(ComponentRegistry.getId(this));
     }

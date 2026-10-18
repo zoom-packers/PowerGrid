@@ -16,9 +16,8 @@
  */
 package org.patryk3211.powergrid.electricity.wire.powercord;
 
+import org.patryk3211.powergrid.utility.ValueInputs;
 import org.patryk3211.powergrid.compat.sable.SableCompanion;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
@@ -127,7 +126,6 @@ public class CordEntity extends BaseWireEntity implements IComplexRaycast {
     }
 
     @Nullable
-    @Environment(EnvType.CLIENT)
     public AABB calculateClientBoundingBox() {
         if(curveParams == null)
             return null;
@@ -475,7 +473,7 @@ public class CordEntity extends BaseWireEntity implements IComplexRaycast {
             grabEndpointPositions();
         }
 
-        if(nbt.contains("PlacedLength")) {
+        if(ValueInputs.contains(nbt, "PlacedLength")) {
             placedLength = nbt.getFloatOr("PlacedLength", 0.0f);
         } else {
             var dX = terminalPos2.x - terminalPos1.x;
@@ -509,7 +507,6 @@ public class CordEntity extends BaseWireEntity implements IComplexRaycast {
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     public @Nullable Vec3 raycast(Vec3 min, Vec3 max) {
         // TODO: Sometimes this raycast is really finicky
         if(getWireEntry() == null)

@@ -1,5 +1,7 @@
 package org.patryk3211.powergrid.electricity.redstoneconverter;
 
+import org.patryk3211.powergrid.utility.ValueInputs;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -65,7 +67,7 @@ public class RedstoneConverterBlockEntity extends ElectricBlockEntity {
     @Override
     protected void read(ValueInput tag, boolean clientPacket) {
         super.read(tag, clientPacket);
-        if(tag.contains("SignalOverride")) {
+        if(ValueInputs.contains(tag, "SignalOverride")) {
             signalOverride = tag.getFloatOr("SignalOverride", 0.0f);
         } else {
             signalOverride = null;

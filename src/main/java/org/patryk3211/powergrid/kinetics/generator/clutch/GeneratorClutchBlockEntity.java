@@ -16,6 +16,7 @@
  */
 package org.patryk3211.powergrid.kinetics.generator.clutch;
 
+import org.patryk3211.powergrid.utility.ValueInputs;
 import com.zurrtum.create.api.stress.BlockStressValues;
 import com.zurrtum.create.content.kinetics.base.GeneratingKineticBlockEntity;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
@@ -209,7 +210,7 @@ public class GeneratorClutchBlockEntity extends GeneratingKineticBlockEntity imp
     protected void read(ValueInput compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         currentRedstonePower = compound.getByteOr("Power", (byte) 0);
-        if(compound.contains("GeneratedSpeed")) {
+        if(ValueInputs.contains(compound, "GeneratedSpeed")) {
             generatedSpeed = compound.getIntOr("GeneratedSpeed", 0);
         } else {
             generatedSpeed = 0;

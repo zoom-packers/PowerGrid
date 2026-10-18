@@ -22,8 +22,6 @@ import com.zurrtum.create.content.kinetics.fan.AirCurrent;
 import com.zurrtum.create.content.schematics.requirement.ItemRequirement;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import com.zurrtum.create.catnip.math.VecHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -86,7 +84,6 @@ public class CircuitBoardBlockEntity extends ElectricBlockEntity implements IEle
     public float totalCoolingFactorMultiplier = 1.0f;
 
     @Nullable
-    @Environment(EnvType.CLIENT)
     public CircuitBoardModelQuads quads;
 
     private VoxelShape shapeCache = null;

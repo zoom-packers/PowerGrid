@@ -17,8 +17,6 @@
 package org.patryk3211.powergrid.circuits.gui;
 
 import com.zurrtum.create.client.catnip.gui.widget.AbstractSimiWidget;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.CharacterEvent;
@@ -42,7 +40,6 @@ import org.patryk3211.powergrid.circuits.schematic.PlacedComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public class ComponentPropertiesWidget extends AbstractSimiWidget {
     public static final Identifier PROPERTIES = PowerGrid.texture("gui/circuit_design_table_properties");
     private static final int TEXTURE_SIZE = 256;

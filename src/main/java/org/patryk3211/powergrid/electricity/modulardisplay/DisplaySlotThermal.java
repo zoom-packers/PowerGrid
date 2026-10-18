@@ -1,5 +1,7 @@
 package org.patryk3211.powergrid.electricity.modulardisplay;
 
+import org.patryk3211.powergrid.utility.ValueInputs;
+
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import com.zurrtum.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
@@ -188,7 +190,7 @@ public class DisplaySlotThermal extends BlockEntityBehaviour {
     @Override
     public void read(ValueInput nbt, boolean clientPacket) {
         super.read(nbt, clientPacket);
-        if (nbt.contains("SlotTemp_" + slotIndex)) {
+        if (ValueInputs.contains(nbt, "SlotTemp_" + slotIndex)) {
             temperature = nbt.getFloatOr("SlotTemp_" + slotIndex, 0.0f);
         }
     }

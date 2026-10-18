@@ -16,8 +16,6 @@
  */
 package org.patryk3211.powergrid.circuits.client;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundSource;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +28,6 @@ import java.util.WeakHashMap;
 
 import static org.patryk3211.powergrid.circuits.components.NeonBulbComponent.LIT;
 
-@Environment(EnvType.CLIENT)
 public class ThyratronSounds {
     private static final float HUM_VOLUME = 0.1f;
     private static final int HUM_DELAY_TICKS = 5;

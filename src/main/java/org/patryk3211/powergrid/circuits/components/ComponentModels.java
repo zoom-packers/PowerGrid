@@ -16,15 +16,12 @@
  */
 package org.patryk3211.powergrid.circuits.components;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.resources.Identifier;
 import org.patryk3211.powergrid.circuits.schematic.PlacedComponent;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Environment(EnvType.CLIENT)
 public class ComponentModels {
     public static Identifier rawModelId(Identifier componentId) {
         return Identifier.fromNamespaceAndPath(componentId.getNamespace(), "component/" + componentId.getPath());

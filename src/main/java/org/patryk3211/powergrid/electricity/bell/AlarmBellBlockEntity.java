@@ -16,8 +16,6 @@
  */
 package org.patryk3211.powergrid.electricity.bell;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
@@ -46,7 +44,6 @@ public class AlarmBellBlockEntity extends ElectricBlockEntity {
         return ThermalBehaviour.fromConfig(this);
     }
 
-    @Environment(EnvType.CLIENT)
     public void tickAudio() {
         if(getVolume() > 0 && !hasSoundInstance) {
             Minecraft.getInstance().getSoundManager().play(new AlarmBellSoundInstance(this));

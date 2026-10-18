@@ -19,15 +19,12 @@ package org.patryk3211.powergrid.equipment.zapper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zurrtum.create.client.content.equipment.zapper.ShootableGadgetRenderHandler;
 import com.zurrtum.create.client.flywheel.lib.transform.TransformStack;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.patryk3211.powergrid.collections.ModdedItems;
 
-@Environment(EnvType.CLIENT)
 public class ElectroZapperRenderHandler extends ShootableGadgetRenderHandler {
     @Override
     public void playSound(InteractionHand hand, Vec3 position) {

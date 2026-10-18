@@ -42,7 +42,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.neoforged.neoforge.fluids.FluidType;
 import org.patryk3211.powergrid.PowerGrid;
+import org.patryk3211.powergrid.neoforge.PowerGridFluidTypes;
 import org.patryk3211.powergrid.registrate.entry.ItemEntry;
 
 public class ModdedFluids {
@@ -124,6 +126,12 @@ public class ModdedFluids {
         @Override
         protected float getExplosionResistance() {
             return 100f;
+        }
+
+        // NeoForge: Create's FlowableFluid only knows Create's own fluid types
+        @Override
+        public FluidType getFluidType() {
+            return PowerGridFluidTypes.ACID.get();
         }
     }
 

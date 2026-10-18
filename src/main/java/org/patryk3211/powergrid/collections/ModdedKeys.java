@@ -17,9 +17,7 @@
 package org.patryk3211.powergrid.collections;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import org.patryk3211.powergrid.neoforge.client.ClientRegistration;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -59,16 +57,17 @@ public enum ModdedKeys {
         this.categoryPath = categoryPath;
     }
 
-    @Environment(EnvType.CLIENT)
     public static void register() {
         KeyMapping.Category category = KeyMapping.Category.MISC;
         for (ModdedKeys entry : values()) {
             if (entry.categoryPath != null) {
-                category = KeyMapping.Category.register(PowerGrid.asResource(entry.categoryPath));
+                // NeoForge: categories and keys are registered in RegisterKeyMappingsEvent
+                category = new KeyMapping.Category(PowerGrid.asResource(entry.categoryPath));
+                ClientRegistration.keyCategory(category);
                 continue;
             }
             entry.keybind = new KeyMapping(entry.description, entry.key, category);
-            KeyMappingHelper.registerKeyMapping(entry.keybind);
+            ClientRegistration.keyMapping(entry.keybind);
         }
     }
 

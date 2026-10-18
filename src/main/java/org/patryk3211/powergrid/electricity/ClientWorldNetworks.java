@@ -16,8 +16,6 @@
  */
 package org.patryk3211.powergrid.electricity;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +34,6 @@ import org.patryk3211.powergrid.network.packets.EndpointTrackingC2SPacket;
 import java.util.ArrayList;
 import java.util.Set;
 
-@Environment(EnvType.CLIENT)
 public class ClientWorldNetworks extends WorldNetworks {
     private final DummyElectricalNetwork network = new DummyElectricalNetwork(globalGraph);
 

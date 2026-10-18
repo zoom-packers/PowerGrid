@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.electricity.light.bulb;
 
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ColorParticleOption;
@@ -177,13 +175,10 @@ public abstract class LightBulbState implements ElectricBehaviour.SyncAppender {
         return this.item == item;
     }
 
-    @Environment(EnvType.CLIENT)
     public abstract PartialModel getModel();
-    @Environment(EnvType.CLIENT)
     public abstract PartialModel getDyedBulb();
 
     @NotNull
-    @Environment(EnvType.CLIENT)
     public abstract PartialModel getLightModel();
 
     public float getAlpha() {

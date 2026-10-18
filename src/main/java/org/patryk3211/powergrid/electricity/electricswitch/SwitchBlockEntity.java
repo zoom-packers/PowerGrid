@@ -16,6 +16,7 @@
  */
 package org.patryk3211.powergrid.electricity.electricswitch;
 
+import org.patryk3211.powergrid.utility.ValueInputs;
 import com.zurrtum.create.client.api.goggles.IHaveGoggleInformation;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -118,7 +119,7 @@ public class SwitchBlockEntity extends ElectricBlockEntity implements IHaveGoggl
             isNormallyClosed = tag.getBooleanOr("NormallyClosed", false);
             wire.setState(switchState != isNormallyClosed);
         }
-        if(tag.contains("Overvolted")) {
+        if(ValueInputs.contains(tag, "Overvolted")) {
             overvoltResistance = tag.getFloatOr("Overvolted", 0.0f);
             if(overvoltResistance <= 0)
                 overvoltResistance = 1f;

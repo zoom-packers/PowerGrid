@@ -21,8 +21,6 @@ import org.patryk3211.powergrid.registrate.builders.ItemBuilder;
 import org.patryk3211.powergrid.registrate.fn.NonNullUnaryOperator;
 import org.patryk3211.powergrid.utility.Env;
 import com.zurrtum.create.client.flywheel.lib.model.baked.PartialModel;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -184,9 +182,7 @@ public class LightBulb extends Item implements ILightBulb, IHaveElectricProperti
     }
 
     public static class SimpleState extends LightBulbState {
-        @Environment(EnvType.CLIENT)
         public Function<State, PartialModel> modelProvider;
-        @Environment(EnvType.CLIENT)
         public Function<DyedState, PartialModel> dyedModelProvider;
 
         public <T extends Item & ILightBulb, F extends SmartBlockEntity & IFixtureEntity> SimpleState(T bulb, F fixture,
@@ -201,7 +197,6 @@ public class LightBulb extends Item implements ILightBulb, IHaveElectricProperti
         }
 
         @Override
-        @Environment(EnvType.CLIENT)
         public PartialModel getModel() {
             var state = State.OFF;
             if(burned) {
@@ -220,7 +215,6 @@ public class LightBulb extends Item implements ILightBulb, IHaveElectricProperti
         }
 
         @Override
-        @Environment(EnvType.CLIENT)
         public PartialModel getDyedBulb() {
             if(bulb.canBeDyed())
                 return dyedModelProvider.apply(DyedState.BULB);
@@ -228,7 +222,6 @@ public class LightBulb extends Item implements ILightBulb, IHaveElectricProperti
         }
 
         @Override
-        @Environment(EnvType.CLIENT)
         public @NotNull PartialModel getLightModel() {
             if(bulb.canBeDyed() && color != null)
                 return dyedModelProvider.apply(DyedState.LIGHT);

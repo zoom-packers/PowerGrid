@@ -19,7 +19,9 @@ package org.patryk3211.powergrid;
 import com.zurrtum.create.api.behaviour.movement.MovementBehaviour;
 import com.zurrtum.create.api.contraption.BlockMovementChecks;
 import com.zurrtum.create.infrastructure.config.AllConfigs;
-import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
@@ -38,9 +40,6 @@ import org.patryk3211.powergrid.electricity.fan.ElectricFanBlockEntity;
 import org.patryk3211.powergrid.electricity.febridge.FEInverterBlockEntity;
 import org.patryk3211.powergrid.electricity.heater.HeaterFanProcessingTypes;
 import org.patryk3211.powergrid.electricity.redstoneconverter.RedstoneConverterRegistry;
-import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
-import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
-import team.reborn.energy.api.EnergyStorage;
 import org.patryk3211.powergrid.electricity.wire.registry.WireItemEntry;
 import org.patryk3211.powergrid.electricity.wire.registry.WireRegistry;
 import org.patryk3211.powergrid.electricity.sim.ElectricalNetwork;
@@ -77,9 +76,7 @@ public class PowerGrid {
 	}
 
 	private static void setup() {
-		DynamicRegistries.registerSynced(ComponentRegistry.ITEM_REGISTRY_KEY, ComponentRegistry.ITEM_CODEC, ComponentRegistry.ITEM_CODEC);
-		DynamicRegistries.register(SolarBiomeRegistry.KEY, SolarBiomeEntry.CODEC);
-		DynamicRegistries.registerSynced(WireRegistry.KEY, WireItemEntry.CODEC, WireItemEntry.CODEC);
+		// NeoForge: the datapack registries are registered in neoforge.PowerGridNeoForge#newDatapackRegistries
 		RedstoneConverterRegistry.init();
 		ModdedAdvancements.register();
 		PowerGridTriggers.register();
@@ -98,7 +95,7 @@ public class PowerGrid {
 	}
 
 	private static void register() {
-		ComponentRegistry.REGISTRY = FabricRegistryBuilder.create(ComponentRegistry.REGISTRY_KEY).buildAndRegister();
+		// NeoForge: ComponentRegistry.REGISTRY is created in neoforge.PowerGridNeoForge#newRegistries
 
 		ModdedSoundEvents.register();
 		ModdedRecipeTypes.register();
@@ -115,12 +112,10 @@ public class PowerGrid {
 		Components.register();
 		ModdedCreativeTabs.register();
 
-		ArgumentTypeRegistry.registerArgumentType(asResource("performance_counter"),
-				PerformanceCommand.PerformanceCounterArgument.class,
-				SingletonArgumentInfo.contextFree(PerformanceCommand.PerformanceCounterArgument::new));
-
-		EnergyStorage.SIDED.registerForBlockEntity(
-				(be, side) -> be.getEnergyStorage(side), ModdedBlockEntities.FE_INVERTER.get());
+		Registry.register(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, asResource("performance_counter"),
+				ArgumentTypeInfos.registerByClass(PerformanceCommand.PerformanceCounterArgument.class,
+						SingletonArgumentInfo.contextFree(PerformanceCommand.PerformanceCounterArgument::new)));
+		// NeoForge: the FE inverter's energy capability is registered in neoforge.PowerGridNeoForge#registerCapabilities
 
 		LightningRodMovementBehaviour lightningRodBehaviour = new LightningRodMovementBehaviour();
 		Blocks.LIGHTNING_ROD.forEach(rod -> MovementBehaviour.REGISTRY.register(rod, lightningRodBehaviour));

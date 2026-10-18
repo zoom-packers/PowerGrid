@@ -1,8 +1,10 @@
 package org.patryk3211.powergrid.network;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+import org.patryk3211.powergrid.neoforge.PlayerLookup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -21,8 +23,8 @@ public class PlayerSelectionImpl extends PlayerSelection {
     private static MinecraftServer currentServer;
 
     static {
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> currentServer = server);
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> currentServer = null);
+        NeoForge.EVENT_BUS.addListener((ServerStartedEvent event) -> currentServer = event.getServer());
+        NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> currentServer = null);
     }
 
     /**
@@ -51,7 +53,7 @@ public class PlayerSelectionImpl extends PlayerSelection {
         buffer.getBytes(buffer.readerIndex(), data);
         PacketSetImpl.PowerGridPayload payload = new PacketSetImpl.PowerGridPayload(PacketSetImpl.payloadType(id), data);
         for (ServerPlayer player : players)
-            ServerPlayNetworking.send(player, payload);
+            PacketDistributor.sendToPlayer(player, payload);
     }
 
     public static PlayerSelection all() {

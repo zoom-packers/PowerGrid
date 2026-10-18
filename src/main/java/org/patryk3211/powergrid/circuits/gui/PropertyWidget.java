@@ -17,12 +17,9 @@
 package org.patryk3211.powergrid.circuits.gui;
 
 import com.zurrtum.create.client.catnip.gui.widget.AbstractSimiWidget;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Font;
 import org.patryk3211.powergrid.circuits.components.properties.PropertyEntry;
 
-@Environment(EnvType.CLIENT)
 public abstract class PropertyWidget<T, P extends PropertyEntry<T>> extends AbstractSimiWidget {
     protected final Font textRenderer;
     protected final P property;

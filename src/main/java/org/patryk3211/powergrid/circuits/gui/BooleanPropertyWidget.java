@@ -17,8 +17,6 @@
 package org.patryk3211.powergrid.circuits.gui;
 
 import com.zurrtum.create.client.foundation.gui.AllGuiTextures;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -29,7 +27,6 @@ import org.patryk3211.powergrid.collections.ModIcons;
 
 import static org.patryk3211.powergrid.circuits.gui.ComponentPropertiesWidget.PROPERTIES;
 
-@Environment(EnvType.CLIENT)
 public class BooleanPropertyWidget extends PropertyWidget<Boolean, PropertyEntry<Boolean>> {
     private final Runnable changeMadeCallback;
 

@@ -20,8 +20,6 @@ import com.mojang.blaze3d.platform.Transparency;
 import com.mojang.math.Quadrant;
 import com.zurrtum.create.catnip.math.VecHelper;
 import com.zurrtum.create.client.infrastructure.model.WrapperBlockStateModel;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.client.color.block.BlockTintSources;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
@@ -63,7 +61,6 @@ import java.util.function.BiFunction;
 
 import static org.patryk3211.powergrid.circuits.schematic.CircuitLayer.GRID_TO_GRID_SCALE;
 
-@Environment(EnvType.CLIENT)
 public class CircuitBoardModel extends WrapperBlockStateModel {
     private static final ModelDebugName DEBUG_NAME = () -> "powergrid:circuit_board";
     private static final Material TRACE_MATERIAL = new Material(PowerGrid.asResource("block/circuit_board_trace"));
@@ -107,8 +104,8 @@ public class CircuitBoardModel extends WrapperBlockStateModel {
 
         interner = baker.interner();
         var materials = baker.materials();
-        traceInfo = BakedQuad.MaterialInfo.of(materials.get(TRACE_MATERIAL, DEBUG_NAME), Transparency.NONE, CuboidFace.NO_TINT, false, 0);
-        padInfo = BakedQuad.MaterialInfo.of(materials.get(PAD_MATERIAL, DEBUG_NAME), Transparency.NONE, CuboidFace.NO_TINT, false, 0);
+        traceInfo = BakedQuad.MaterialInfo.of(materials.get(TRACE_MATERIAL, DEBUG_NAME), Transparency.NONE, CuboidFace.NO_TINT, Direction.UP, 0, true);
+        padInfo = BakedQuad.MaterialInfo.of(materials.get(PAD_MATERIAL, DEBUG_NAME), Transparency.NONE, CuboidFace.NO_TINT, Direction.UP, 0, true);
 
         componentParts.clear();
         for(var id : ComponentModels.collectRawIds())
@@ -221,7 +218,9 @@ public class CircuitBoardModel extends WrapperBlockStateModel {
     }
 
     private static BakedQuad.MaterialInfo destroyedInfo(BakedQuad.MaterialInfo info) {
-        return new BakedQuad.MaterialInfo(info.sprite(), info.layer(), info.itemRenderType(), DESTROYED_TINT, info.shade(), info.lightEmission());
+        // 26.3: shade=false became shadeDirectionOverride=UP; the glint render types are part of MaterialInfo
+        return new BakedQuad.MaterialInfo(info.sprite(), info.layer(), info.itemRenderType(), info.itemGlintRenderType(),
+                info.itemGlintSpecialRenderType(), DESTROYED_TINT, info.shadeDirectionOverride(), info.lightEmission(), info.ambientOcclusion());
     }
 
     private static Vector3fc placeVertex(Vector3fc position, Quaternionf rotation, Vector3f correction, Vector3f offset) {

@@ -22,9 +22,7 @@ import com.zurrtum.create.client.AllModels;
 import com.zurrtum.create.client.content.decoration.encasing.EncasedCTBehaviour;
 import com.zurrtum.create.client.foundation.block.connected.ConnectedTextureBehaviour;
 import com.zurrtum.create.client.infrastructure.model.CTModel;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry;
+import org.patryk3211.powergrid.neoforge.client.ClientRegistration;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
@@ -38,7 +36,6 @@ import org.patryk3211.powergrid.electricity.battery.BatteryCTBehaviour;
 import org.patryk3211.powergrid.electricity.solarpanel.SolarPanelCTBehaviour;
 import org.patryk3211.powergrid.general.ceilingtile.solar.CeilingTileSolarBlockCTBehaviour;
 
-@Environment(EnvType.CLIENT)
 public class ModdedModels {
     public static void register() {
         connectedTextures(ModdedBlocks.BATTERY.get(), new BatteryCTBehaviour());
@@ -53,7 +50,7 @@ public class ModdedModels {
         connectedTextures(ModdedBlocks.SOLAR_PANEL.get(), new SolarPanelCTBehaviour());
         connectedTextures(ModdedBlocks.CEILING_TILE_SOLAR.get(), new CeilingTileSolarBlockCTBehaviour());
         AllModels.register(ModdedBlocks.CIRCUIT_BOARD.get(), CircuitBoardModel.of());
-        BlockColorRegistry.register(CircuitBoardModel.tintSources(), ModdedBlocks.CIRCUIT_BOARD.get());
+        ClientRegistration.blockTints(CircuitBoardModel.tintSources(), ModdedBlocks.CIRCUIT_BOARD.get());
         AllFluidConfigs.model(ModdedFluids.ACID);
     }
 

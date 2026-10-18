@@ -16,14 +16,11 @@
  */
 package org.patryk3211.powergrid.circuits.client;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.patryk3211.powergrid.circuits.circuitboard.CircuitBoardBlockEntity;
 import org.patryk3211.powergrid.circuits.schematic.PlacedComponent;
 
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public interface ComponentRenderer {
     void extract(CircuitBoardBlockEntity be, PlacedComponent placed, float partialTicks, int light, int overlay, List<ComponentDrawCall> out);
 }

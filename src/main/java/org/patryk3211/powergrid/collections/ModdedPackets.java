@@ -16,7 +16,7 @@
  */
 package org.patryk3211.powergrid.collections;
 
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import org.patryk3211.powergrid.neoforge.PlayerLookup;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

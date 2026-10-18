@@ -16,6 +16,7 @@
  */
 package org.patryk3211.powergrid.electricity.crt;
 
+import org.patryk3211.powergrid.utility.ValueInputs;
 import net.minecraft.world.InteractionResult;
 
 import net.minecraft.core.BlockPos;
@@ -97,7 +98,7 @@ public class CRTBlockEntity extends ElectricBlockEntity {
     @Override
     protected void read(ValueInput tag, boolean clientPacket) {
         super.read(tag, clientPacket);
-        if (tag.contains("Color")) {
+        if (ValueInputs.contains(tag, "Color")) {
             traceColor = DyeColor.values()[Mth.clamp(tag.getIntOr("Color", 0), 0, DyeColor.values().length - 1)];
         } else {
             traceColor = DyeColor.RED;

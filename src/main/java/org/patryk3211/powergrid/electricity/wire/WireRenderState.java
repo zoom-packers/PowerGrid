@@ -18,13 +18,10 @@ package org.patryk3211.powergrid.electricity.wire;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
-@Environment(EnvType.CLIENT)
 public class WireRenderState extends EntityRenderState {
     private static final int INITIAL_CAPACITY = 32;
 

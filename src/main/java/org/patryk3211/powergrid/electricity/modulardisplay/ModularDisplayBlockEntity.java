@@ -1,9 +1,9 @@
 package org.patryk3211.powergrid.electricity.modulardisplay;
 
+import net.minecraft.util.Prediction;
+
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -171,7 +171,7 @@ public class ModularDisplayBlockEntity extends ElectricBlockEntity{
         if (held.isEmpty() && player.isCrouching()) {
             if (current == null) return;
             if (!player.getInventory().add(new ItemStack(ModdedItems.DISPLAY_MODULE.get()))) {
-                player.drop(new ItemStack(ModdedItems.DISPLAY_MODULE.get()), false);
+                player.drop(new ItemStack(ModdedItems.DISPLAY_MODULE.get()), false, Prediction.SERVER_ONLY);
             }
             modules[slotIndex] = null;
             slotThermals[slotIndex].resetTemperature();
@@ -415,7 +415,6 @@ public class ModularDisplayBlockEntity extends ElectricBlockEntity{
     }
 
     @Nullable
-    @Environment(EnvType.CLIENT)
     public static Component overlayText(Player player) {
         if(!player.getItemInHand(InteractionHand.MAIN_HAND).is(AllItems.WRENCH))
             return null;

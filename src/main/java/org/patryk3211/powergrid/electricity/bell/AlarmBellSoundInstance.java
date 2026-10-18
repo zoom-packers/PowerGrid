@@ -16,14 +16,11 @@
  */
 package org.patryk3211.powergrid.electricity.bell;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundSource;
 import org.patryk3211.powergrid.collections.ModdedSoundEvents;
 import net.minecraft.world.phys.Vec3;
 
-@Environment(EnvType.CLIENT)
 public class AlarmBellSoundInstance extends AbstractTickableSoundInstance {
     private final AlarmBellBlockEntity be;
 

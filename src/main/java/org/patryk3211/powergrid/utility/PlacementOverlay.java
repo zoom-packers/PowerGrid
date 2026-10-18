@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.utility;
 
 import com.zurrtum.create.catnip.data.Pair;
 import com.zurrtum.create.catnip.theme.Color;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -45,7 +43,6 @@ import org.patryk3211.powergrid.mixin.client.BlueprintOverlayRendererAccessor;
 import java.util.ArrayList;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public class PlacementOverlay {
     private static final List<IOverlayTextProvider> overlayProviders = new ArrayList<>();
     private static final List<Component> lines = new ArrayList<>();

@@ -20,8 +20,6 @@ import com.zurrtum.create.client.catnip.lang.FontHelper;
 import com.zurrtum.create.client.foundation.item.ItemDescription;
 import com.zurrtum.create.client.foundation.item.KineticStats;
 import com.zurrtum.create.client.foundation.item.TooltipModifier;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
@@ -35,7 +33,6 @@ import java.util.List;
  * Kept in its own client only class so the client only {@code TooltipModifier} return type never
  * appears in a method descriptor belonging to a class loaded on a dedicated server.
  */
-@Environment(EnvType.CLIENT)
 public class PowerGridTooltipModifiers {
     public static void register() {
         PowerGrid.REGISTRATE.setTooltipModifierFactory(item -> new ItemDescription.Modifier(item, FontHelper.Palette.STANDARD_CREATE)

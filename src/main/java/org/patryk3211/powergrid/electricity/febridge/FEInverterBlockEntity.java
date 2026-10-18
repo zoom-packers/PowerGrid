@@ -6,12 +6,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+import net.neoforged.neoforge.transfer.TransferPreconditions;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import net.minecraft.core.Direction;
 import org.patryk3211.powergrid.collections.ModdedConfigs;
-import team.reborn.energy.api.EnergyStorage;
 import org.patryk3211.powergrid.electricity.base.ElectricBlockEntity;
 import org.patryk3211.powergrid.electricity.sim.node.ProvidedVoltageSourceCoupling;
 import org.patryk3211.powergrid.electricity.sim.special.CRSeriesWire;
@@ -105,13 +105,14 @@ public class FEInverterBlockEntity extends ElectricBlockEntity {
         return (int) storage.amount;
     }
 
-    public EnergyStorage getEnergyStorage(Direction side) {
+    public EnergyHandler getEnergyStorage(Direction side) {
         if(side != null && side != getBlockState().getValue(FEInverterBlock.FACING))
             return null;
         return storage;
     }
 
-    public class InverterEnergyStorage extends SnapshotParticipant<Long> implements EnergyStorage {
+    // NeoForge: Team Reborn Energy's EnergyStorage -> NeoForge EnergyHandler, SnapshotParticipant -> SnapshotJournal
+    public class InverterEnergyStorage extends SnapshotJournal<Long> implements EnergyHandler {
         public long amount;
 
         @Override
@@ -120,24 +121,19 @@ public class FEInverterBlockEntity extends ElectricBlockEntity {
         }
 
         @Override
-        protected void readSnapshot(Long snapshot) {
+        protected void revertToSnapshot(Long snapshot) {
             amount = snapshot;
         }
 
         @Override
-        protected void onFinalCommit() {
+        protected void onRootCommit(Long originalState) {
             setChanged();
         }
 
         @Override
-        public boolean supportsExtraction() {
-            return false;
-        }
-
-        @Override
-        public long insert(long maxAmount, TransactionContext transaction) {
-            StoragePreconditions.notNegative(maxAmount);
-            long inserted = Math.min(maxAmount, getCapacity() - amount);
+        public int insert(int maxAmount, TransactionContext transaction) {
+            TransferPreconditions.checkNonNegative(maxAmount);
+            int inserted = (int) Math.min(maxAmount, getCapacityAsLong() - amount);
             if(inserted <= 0)
                 return 0;
             updateSnapshots(transaction);
@@ -146,17 +142,18 @@ public class FEInverterBlockEntity extends ElectricBlockEntity {
         }
 
         @Override
-        public long extract(long maxAmount, TransactionContext transaction) {
+        public int extract(int maxAmount, TransactionContext transaction) {
+            TransferPreconditions.checkNonNegative(maxAmount);
             return 0;
         }
 
         @Override
-        public long getAmount() {
+        public long getAmountAsLong() {
             return amount;
         }
 
         @Override
-        public long getCapacity() {
+        public long getCapacityAsLong() {
             return energyBufferSize();
         }
     }

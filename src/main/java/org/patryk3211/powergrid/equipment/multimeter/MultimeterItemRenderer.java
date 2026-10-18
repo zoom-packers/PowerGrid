@@ -19,8 +19,6 @@ package org.patryk3211.powergrid.equipment.multimeter;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import org.patryk3211.powergrid.compat.sable.SableCompanion;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -37,7 +35,6 @@ import org.patryk3211.powergrid.PowerGrid;
 import org.patryk3211.powergrid.electricity.wire.HangingWireRenderer;
 import org.patryk3211.powergrid.electricity.wire.WireEndpointType;
 
-@Environment(EnvType.CLIENT)
 public class MultimeterItemRenderer {
     private static final Identifier TEXTURE = PowerGrid.texture("special/copper_wire");
     private static float mainPrevDial;

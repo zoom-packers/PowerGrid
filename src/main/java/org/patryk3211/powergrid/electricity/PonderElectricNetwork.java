@@ -17,10 +17,7 @@
 package org.patryk3211.powergrid.electricity;
 
 import com.zurrtum.create.client.ponder.api.level.PonderLevel;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
-@Environment(EnvType.CLIENT)
 public class PonderElectricNetwork extends GlobalElectricNetworks {
     public static void tickWorldNetworks(PonderLevel world) {
         GlobalElectricNetworks.preTick(world);

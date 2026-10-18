@@ -19,8 +19,6 @@ package org.patryk3211.powergrid.circuits.circuitboard;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zurrtum.create.client.flywheel.lib.transform.TransformStack;
 import com.zurrtum.create.client.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer.CrumblingOverlay;
@@ -35,7 +33,6 @@ import org.patryk3211.powergrid.circuits.components.IRenderedComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public class CircuitBoardRenderer extends SmartBlockEntityRenderer<CircuitBoardBlockEntity, CircuitBoardRenderer.CircuitBoardRenderState> {
     public CircuitBoardRenderer(BlockEntityRendererProvider.Context context) {
         super(context);

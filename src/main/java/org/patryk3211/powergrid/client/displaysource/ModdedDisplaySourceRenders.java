@@ -17,11 +17,8 @@
 package org.patryk3211.powergrid.client.displaysource;
 
 import com.zurrtum.create.client.AllDisplaySourceRenders;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.patryk3211.powergrid.collections.ModdedDisplaySources;
 
-@Environment(EnvType.CLIENT)
 public class ModdedDisplaySourceRenders {
     public static void register() {
         AllDisplaySourceRenders.register(ModdedDisplaySources.ELECTRIC_GAUGE.get(), ElectricGaugeDisplaySourceRender::new);

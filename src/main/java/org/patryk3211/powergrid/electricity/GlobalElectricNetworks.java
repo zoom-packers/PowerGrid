@@ -16,8 +16,6 @@
  */
 package org.patryk3211.powergrid.electricity;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -70,7 +68,6 @@ public class GlobalElectricNetworks {
         JunctionWireEndpoint.unloadWorld(world);
     }
 
-    @Environment(EnvType.CLIENT)
     public static WorldNetworks makeClientWorldNetworks(Level world) {
         return new ClientWorldNetworks(world);
     }

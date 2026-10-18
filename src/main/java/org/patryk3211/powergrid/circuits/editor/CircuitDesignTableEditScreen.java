@@ -22,8 +22,6 @@ import com.zurrtum.create.client.foundation.gui.menu.AbstractSimiContainerScreen
 import com.zurrtum.create.client.foundation.gui.widget.IconButton;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -64,7 +62,6 @@ import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.TagValueInput;
 import org.patryk3211.powergrid.circuits.circuitboard.CircuitBoardBlockEntity;
 
-@Environment(EnvType.CLIENT)
 public class CircuitDesignTableEditScreen<T extends CircuitEditMenu<?>> extends AbstractSimiContainerScreen<T> {
     private static final Identifier BACKGROUND = PowerGrid.texture("gui/circuit_design_table_edit");
     private static final int WIDTH = 182;

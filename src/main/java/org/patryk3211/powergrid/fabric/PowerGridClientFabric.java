@@ -18,12 +18,9 @@ package org.patryk3211.powergrid.fabric;
 
 import org.patryk3211.powergrid.registrate.client.RegistrateClient;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.patryk3211.powergrid.PowerGrid;
 import org.patryk3211.powergrid.PowerGridClient;
 
-@Environment(EnvType.CLIENT)
 public final class PowerGridClientFabric implements ClientModInitializer {
     @Override
     public void onInitializeClient() {

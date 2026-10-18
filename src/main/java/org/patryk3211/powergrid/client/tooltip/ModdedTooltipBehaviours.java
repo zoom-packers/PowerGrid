@@ -21,13 +21,10 @@ import com.zurrtum.create.client.foundation.blockEntity.behaviour.tooltip.Kineti
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.tooltip.TooltipBehaviour;
 import com.zurrtum.create.content.kinetics.base.KineticBlockEntity;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public class ModdedTooltipBehaviours {
     public static class Device<T extends SmartBlockEntity & IHaveGoggleInformation> extends TooltipBehaviour<T> implements IHaveGoggleInformation {
         public Device(T blockEntity) {

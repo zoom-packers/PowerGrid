@@ -16,22 +16,19 @@
  */
 package org.patryk3211.powergrid.collections;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import org.patryk3211.powergrid.neoforge.client.ClientRegistration;
 import org.patryk3211.powergrid.electricity.light.string.StringLightCordRenderer;
 import org.patryk3211.powergrid.electricity.wire.BlockWireRenderer;
 import org.patryk3211.powergrid.electricity.wire.HangingWireRenderer;
 import org.patryk3211.powergrid.electricity.wire.powercord.CordRenderer;
 import org.patryk3211.powergrid.equipment.zapper.ZapProjectileRenderer;
 
-@Environment(EnvType.CLIENT)
 public class ModdedEntityRenders {
     public static void register() {
-        EntityRendererRegistry.register(ModdedEntities.HANGING_WIRE.get(), HangingWireRenderer::new);
-        EntityRendererRegistry.register(ModdedEntities.BLOCK_WIRE.get(), BlockWireRenderer::new);
-        EntityRendererRegistry.register(ModdedEntities.CORD_ENTITY.get(), CordRenderer::new);
-        EntityRendererRegistry.register(ModdedEntities.STRING_LIGHT_CORD.get(), StringLightCordRenderer::new);
-        EntityRendererRegistry.register(ModdedEntities.ZAP_PROJECTILE.get(), ZapProjectileRenderer::new);
+        ClientRegistration.entityRenderer(ModdedEntities.HANGING_WIRE.get(), HangingWireRenderer::new);
+        ClientRegistration.entityRenderer(ModdedEntities.BLOCK_WIRE.get(), BlockWireRenderer::new);
+        ClientRegistration.entityRenderer(ModdedEntities.CORD_ENTITY.get(), CordRenderer::new);
+        ClientRegistration.entityRenderer(ModdedEntities.STRING_LIGHT_CORD.get(), StringLightCordRenderer::new);
+        ClientRegistration.entityRenderer(ModdedEntities.ZAP_PROJECTILE.get(), ZapProjectileRenderer::new);
     }
 }

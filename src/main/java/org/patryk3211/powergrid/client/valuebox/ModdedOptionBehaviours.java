@@ -20,8 +20,6 @@ import com.zurrtum.create.AllItems;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import org.patryk3211.powergrid.collections.ModIcons;
@@ -31,7 +29,6 @@ import org.patryk3211.powergrid.kinetics.generator.clutch.GeneratorClutchBlockEn
 import org.patryk3211.powergrid.kinetics.generator.clutch.GeneratorClutchBlockEntity.ClutchMode;
 import org.patryk3211.powergrid.utility.Lang;
 
-@Environment(EnvType.CLIENT)
 public class ModdedOptionBehaviours {
     public enum ClutchModeIcon implements INamedIconOptions {
         GENERATOR,

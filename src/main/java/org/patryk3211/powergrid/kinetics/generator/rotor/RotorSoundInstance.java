@@ -16,8 +16,6 @@
  */
 package org.patryk3211.powergrid.kinetics.generator.rotor;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.core.BlockPos;
@@ -28,7 +26,6 @@ import org.patryk3211.powergrid.collections.ModdedConfigs;
 import org.patryk3211.powergrid.collections.ModdedSoundEvents;
 import net.minecraft.world.phys.Vec3;
 
-@Environment(EnvType.CLIENT)
 public class RotorSoundInstance extends AbstractTickableSoundInstance {
     private final RotorBehaviour behaviour;
 

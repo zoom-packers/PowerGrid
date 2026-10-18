@@ -17,8 +17,6 @@
 package org.patryk3211.powergrid.equipment.zapper;
 
 import com.zurrtum.create.content.equipment.zapper.ShootableGadgetItemMethods;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

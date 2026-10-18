@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.electricity.particles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.state.level.ParticleGroupRenderState;
@@ -29,7 +27,6 @@ import org.patryk3211.powergrid.collections.ModdedRenderLayers;
 import java.util.ArrayList;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public class ZapParticleRenderState implements ParticleGroupRenderState {
     private final List<Segment> segments = new ArrayList<>();
 

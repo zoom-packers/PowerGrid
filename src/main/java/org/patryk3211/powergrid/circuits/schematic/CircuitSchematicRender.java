@@ -16,8 +16,6 @@
  */
 package org.patryk3211.powergrid.circuits.schematic;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import org.patryk3211.powergrid.circuits.client.FootprintRenderer;
 
@@ -27,7 +25,6 @@ import static org.patryk3211.powergrid.circuits.schematic.CircuitLayer.GRID_TO_G
 
 
 
-@Environment(EnvType.CLIENT)
 public class CircuitSchematicRender {
     public static final int CIRCUIT_SCALE = 8;
     public static final int TRACE_PADDING = 1;

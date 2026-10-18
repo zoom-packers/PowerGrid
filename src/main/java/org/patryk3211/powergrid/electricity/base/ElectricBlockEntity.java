@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.electricity.base;
 
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -98,7 +96,6 @@ public abstract class ElectricBlockEntity extends SmartBlockEntity implements IE
         return true;
     }
 
-    @Environment(EnvType.CLIENT)
     public void tickAudio() {
         if(!isNoisy() || thermalBehaviour == null)
             return;

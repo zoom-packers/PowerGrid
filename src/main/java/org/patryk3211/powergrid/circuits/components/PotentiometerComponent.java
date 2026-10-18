@@ -19,8 +19,6 @@ package org.patryk3211.powergrid.circuits.components;
 import com.google.common.collect.ImmutableCollection;
 import com.zurrtum.create.foundation.blockEntity.behaviour.ValueSettings;
 import com.zurrtum.create.client.foundation.blockEntity.ValueSettingsBoard;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
@@ -49,7 +47,6 @@ public class PotentiometerComponent extends OrientableComponent implements IInte
     public static final FloatProperty RESISTANCE = new FloatProperty(PowerGrid.MOD_ID, "potentiometer_resistance", 1000, 100, 100000);
     public static final IntProperty VALUE = new IntProperty(PowerGrid.MOD_ID, "potentiometer_value", 50, 0, 100);
 
-    @Environment(EnvType.CLIENT)
     private static ValueSettingsBoard BOARD;
 
     public PotentiometerComponent(ComponentFootprint footprint) {

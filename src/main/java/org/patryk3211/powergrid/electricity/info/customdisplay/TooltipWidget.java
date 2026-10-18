@@ -16,8 +16,6 @@
  */
 package org.patryk3211.powergrid.electricity.info.customdisplay;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
@@ -25,7 +23,6 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
-@Environment(EnvType.CLIENT)
 public class TooltipWidget extends AbstractWidget {
     public TooltipWidget(int x, int y, int width, int height, Component tooltip) {
         super(x, y, width, height, CommonComponents.EMPTY);

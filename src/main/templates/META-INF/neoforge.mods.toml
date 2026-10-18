@@ -1,0 +1,53 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "Apache-2.0"
+issueTrackerURL = "https://github.com/chaevsfe/PowerGrid/issues"
+
+[[mods]]
+modId = "powergrid"
+version = "${mod_version}"
+displayName = "Create Fly: Power Grid (NeoForge)"
+iconFile = "assets/powergrid/icon.png"
+authors = "patryk3211, Da-Negy, rvndm, casvara (Power Grid); chaevsfe (Create Fly port); Zoom Packers (NeoForge 26.3 port)"
+displayURL = "https://github.com/patryk3211/PowerGrid"
+description = '''
+Physics-based electricity simulation for Create, running on the NeoForge 26.3 port of Create Fly.
+Unofficial: do not report issues from this build to the Power Grid or Create Fly developers.
+'''
+
+[[mixins]]
+config = "powergrid.mixins.json"
+
+[[mixins]]
+config = "powergrid.client.mixins.json"
+
+[[accessTransformers]]
+file = "META-INF/accesstransformer.cfg"
+
+[[dependencies.powergrid]]
+modId = "neoforge"
+type = "required"
+versionRange = "${neo_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.powergrid]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.powergrid]]
+modId = "create"
+type = "required"
+versionRange = "${create_version_range}"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.powergrid]]
+modId = "createaddition"
+type = "optional"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"

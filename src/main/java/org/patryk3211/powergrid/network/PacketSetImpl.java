@@ -2,11 +2,6 @@ package org.patryk3211.powergrid.network;
 
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -15,43 +10,63 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+// NeoForge: payload types and handlers are registered from the mod-bus events below instead of Fabric's
+// PayloadTypeRegistry / ServerPlayNetworking / ClientPlayNetworking. Handlers run on the main thread, as on Fabric.
 public class PacketSetImpl extends PacketSet {
+    private static final List<PacketSetImpl> SETS = new ArrayList<>();
+
     protected PacketSetImpl(String id, int version,
                             List<Function<FriendlyByteBuf, S2CPacket>> s2cPackets,
                             Object2IntMap<Class<? extends S2CPacket>> s2cTypes,
                             List<Function<FriendlyByteBuf, C2SPacket>> c2sPackets,
                             Object2IntMap<Class<? extends C2SPacket>> c2sTypes) {
         super(id, version, s2cPackets, s2cTypes, c2sPackets, c2sTypes);
-        PayloadTypeRegistry.clientboundPlay().register(payloadType(s2cPacket), PowerGridPayload.STREAM_CODEC);
-        PayloadTypeRegistry.serverboundPlay().register(payloadType(c2sPacket), PowerGridPayload.STREAM_CODEC);
+        SETS.add(this);
+    }
+
+    /** Called from the mod bus ({@code neoforge.PowerGridNeoForge}). */
+    public static void registerPayloads(RegisterPayloadHandlersEvent event) {
+        for (PacketSetImpl set : SETS) {
+            event.registrar(String.valueOf(set.version))
+                    .playToClient(payloadType(set.s2cPacket), PowerGridPayload.STREAM_CODEC)
+                    .playToServer(payloadType(set.c2sPacket), PowerGridPayload.STREAM_CODEC, (payload, context) ->
+                            set.handleC2SPacket((ServerPlayer) context.player(), payload.toBuffer()));
+        }
+    }
+
+    /** Called from the client mod bus ({@code neoforge.client.PowerGridNeoForgeClient}). */
+    public static void registerClientHandlers(RegisterClientPayloadHandlersEvent event) {
+        for (PacketSetImpl set : SETS) {
+            event.register(payloadType(set.s2cPacket), (payload, context) ->
+                    set.handleS2CPacket(Minecraft.getInstance(), payload.toBuffer()));
+        }
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     public void registerS2CListener() {
-        ClientPlayNetworking.registerGlobalReceiver(payloadType(s2cPacket), (payload, context) ->
-                handleS2CPacket(context.client(), payload.toBuffer()));
+        // NeoForge: see registerClientHandlers
     }
 
     @Override
     public void registerC2SListener() {
-        ServerPlayNetworking.registerGlobalReceiver(payloadType(c2sPacket), (payload, context) ->
-                handleC2SPacket(context.player(), payload.toBuffer()));
+        // NeoForge: see registerPayloads
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     protected void doSendC2S(FriendlyByteBuf buf) {
-        ClientPlayNetworking.send(new PowerGridPayload(payloadType(c2sPacket), copyBytes(buf)));
+        ClientPacketDistributor.sendToServer(new PowerGridPayload(payloadType(c2sPacket), copyBytes(buf)));
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     public void send(Object packet) {
         Minecraft.getInstance().getConnection().send((Packet<?>) packet);
     }

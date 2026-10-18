@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.circuits.components;
 
 import com.google.common.collect.ImmutableCollection;
 import com.zurrtum.create.Create;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -97,7 +95,6 @@ public abstract class GaugeComponent extends OrientableComponent implements IRed
         return true;
     }
 
-    @Environment(EnvType.CLIENT)
     public static class RenderData {
         public float prevState;
         public float state;

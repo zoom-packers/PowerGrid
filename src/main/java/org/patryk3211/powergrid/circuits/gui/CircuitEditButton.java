@@ -17,12 +17,9 @@
 package org.patryk3211.powergrid.circuits.gui;
 
 import com.zurrtum.create.client.catnip.gui.widget.AbstractSimiWidget;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import org.jetbrains.annotations.NotNull;
 
-@Environment(EnvType.CLIENT)
 public class CircuitEditButton extends AbstractSimiWidget {
     public CircuitEditButton(int x, int y, int w, int h) {
         super(x, y, w, h);

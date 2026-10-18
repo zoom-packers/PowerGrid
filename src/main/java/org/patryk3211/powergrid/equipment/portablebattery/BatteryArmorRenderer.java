@@ -18,33 +18,52 @@ package org.patryk3211.powergrid.equipment.portablebattery;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.item.ItemStack;
-import org.patryk3211.powergrid.collections.ModdedItems;
 import org.patryk3211.powergrid.electricity.base.HorizontalElectricBlock;
+import org.patryk3211.powergrid.neoforge.client.ClientRegistration;
 
-@Environment(EnvType.CLIENT)
-public class BatteryArmorRenderer implements ArmorRenderer {
+/**
+ * NeoForge: Fabric's ArmorRenderer has no NeoForge counterpart, so the worn battery is a render layer again (as in
+ * upstream Power Grid and Create's backtank), added to player, mannequin and armor stand renderers. The battery's
+ * equipment asset ({@code powergrid:zinc}) has no layers, so vanilla's armor layer draws nothing for it.
+ */
+public class BatteryArmorRenderer<S extends HumanoidRenderState, M extends HumanoidModel<? super S>> extends RenderLayer<S, M> {
+    public BatteryArmorRenderer(RenderLayerParent<S, M> parent) {
+        super(parent);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static void register() {
-        ArmorRenderer.register(new BatteryArmorRenderer(), ModdedItems.PORTABLE_BATTERY.get());
+        ClientRegistration.layers(event -> {
+            for (var skin : event.getSkins()) {
+                addTo(event.getPlayerRenderer(skin));
+                addTo(event.getMannequinRenderer(skin));
+            }
+            addTo(event.getRenderer(EntityTypes.ARMOR_STAND));
+        });
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static void addTo(Object renderer) {
+        if (renderer instanceof LivingEntityRenderer living && living.getModel() instanceof HumanoidModel<?>)
+            living.addLayer(new BatteryArmorRenderer(living));
     }
 
     @Override
-    public void render(PoseStack matrices, SubmitNodeCollector submitter, ItemStack stack, HumanoidRenderState state,
-                       EquipmentSlot slot, int light, HumanoidModel<HumanoidRenderState> contextModel) {
+    public void submit(PoseStack matrices, SubmitNodeCollector submitter, int light, S state, float yRot, float xRot) {
         if(state.pose == Pose.SLEEPING)
             return;
 
-        if(!(stack.getItem() instanceof PortableBatteryItem item))
+        if(!(state.chestEquipment.getItem() instanceof PortableBatteryItem item))
             return;
 
         var renderedState = item.getBlock().defaultBlockState()
@@ -53,7 +72,7 @@ public class BatteryArmorRenderer implements ArmorRenderer {
 
         matrices.pushPose();
 
-        contextModel.body.translateAndRotate(matrices);
+        getParentModel().body.translateAndRotate(matrices);
         matrices.translate(-1 / 2f, 10 / 16f, 1f);
         matrices.scale(1, -1, -1);
 

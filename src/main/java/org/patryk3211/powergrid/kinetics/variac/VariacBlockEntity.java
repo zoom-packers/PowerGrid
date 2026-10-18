@@ -17,8 +17,6 @@
 package org.patryk3211.powergrid.kinetics.variac;
 
 import com.zurrtum.create.client.api.goggles.IHaveGoggleInformation;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -118,7 +116,6 @@ public class VariacBlockEntity extends TunedBlockEntity implements IHaveGoggleIn
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     public void tickAudio() {
         super.tickAudio();
         SoundScapes.play(SoundScapes.AmbienceGroup.HUM, worldPosition, 1, lastCurrent / 20);

@@ -16,8 +16,6 @@
  */
 package org.patryk3211.powergrid.electricity.particles;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -26,7 +24,6 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.RandomSource;
 
-@Environment(EnvType.CLIENT)
 public class SparkParticle extends SingleQuadParticle {
     protected SparkParticle(SparkParticleData data, ClientLevel world, double x, double y, double z, double vX, double vY, double vZ, SpriteSet sprites) {
         super(world, x, y, z, sprites.first());
@@ -58,7 +55,6 @@ public class SparkParticle extends SingleQuadParticle {
         return Layer.OPAQUE;
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Factory implements ParticleProvider<SparkParticleData> {
         private final SpriteSet sprites;
 

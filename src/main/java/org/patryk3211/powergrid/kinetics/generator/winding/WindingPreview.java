@@ -17,8 +17,6 @@
 package org.patryk3211.powergrid.kinetics.generator.winding;
 
 import com.zurrtum.create.content.kinetics.simpleRelays.ShaftBlock;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -36,7 +34,6 @@ import java.util.Random;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS;
 import static org.patryk3211.powergrid.kinetics.generator.winding.WindingItem.*;
 
-@Environment(EnvType.CLIENT)
 public class WindingPreview {
     private static final Random r = new Random();
 

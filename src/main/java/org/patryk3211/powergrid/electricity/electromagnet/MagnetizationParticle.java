@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.electricity.electromagnet;
 
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import com.zurrtum.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -30,7 +28,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
 
-@Environment(EnvType.CLIENT)
 public class MagnetizationParticle extends SingleQuadParticle {
     private final BlockPos controller;
     private boolean triggered;
@@ -109,7 +106,6 @@ public class MagnetizationParticle extends SingleQuadParticle {
         return Layer.OPAQUE;
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Factory implements ParticleProvider<MagnetizationParticleData> {
         private final SpriteSet sprites;
 

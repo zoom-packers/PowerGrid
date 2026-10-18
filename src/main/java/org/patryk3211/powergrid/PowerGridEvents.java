@@ -1,16 +1,5 @@
 package org.patryk3211.powergrid;
 
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityLevelChangeEvents;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -38,6 +27,20 @@ import org.patryk3211.powergrid.network.packets.NegotiateSyncC2SPacket;
 import org.patryk3211.powergrid.network.packets.ServerConfigS2CPacket;
 import org.patryk3211.powergrid.utility.Lang;
 import net.minecraft.server.permissions.Permissions;
+import net.minecraft.server.level.ChunkLevel;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.ChunkPos;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.level.ChunkEvent;
+import net.neoforged.neoforge.event.level.ChunkTicketLevelUpdatedEvent;
+import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -45,35 +48,83 @@ import java.util.List;
 import java.util.Map;
 
 public class PowerGridEvents {
-	private record PendingChunkStatus(LevelChunk chunk, FullChunkStatus oldStatus, FullChunkStatus newStatus) { }
+	// NeoForge: Fabric's FULL_CHUNK_STATUS_CHANGE handed over the LevelChunk; NeoForge's ticket-level event only has the
+	// position. The chunk is taken when the event fires if it is already loaded (so a chunk that is about to unload
+	// still gets paused), otherwise looked up when the queue is drained at the start of the next level tick.
+	private record PendingChunkStatus(ChunkPos pos, @org.jetbrains.annotations.Nullable LevelChunk chunk, FullChunkStatus oldStatus, FullChunkStatus newStatus) { }
 
 	private static final Map<ServerLevel, List<PendingChunkStatus>> PENDING_CHUNK_STATUS = new IdentityHashMap<>();
 
 	public static void register() {
-		ServerLifecycleEvents.SERVER_STARTED.register(server -> ComponentRegistry.validateItemEntries(server.registryAccess()));
-		ServerTickEvents.START_LEVEL_TICK.register(PowerGridEvents::levelPreTick);
-		ServerTickEvents.END_LEVEL_TICK.register(GlobalElectricNetworks::postTick);
-		ServerTickEvents.END_SERVER_TICK.register(EntityWireInteraction::postTick);
-		ServerLevelEvents.UNLOAD.register((server, level) -> {
-			PENDING_CHUNK_STATUS.remove(level);
-			GlobalElectricNetworks.unloadWorld(level);
+		var bus = NeoForge.EVENT_BUS;
+		bus.addListener((ServerStartedEvent event) -> ComponentRegistry.validateItemEntries(event.getServer().registryAccess()));
+		bus.addListener((LevelTickEvent.Pre event) -> {
+			if (event.getLevel() instanceof ServerLevel level)
+				levelPreTick(level);
 		});
-		CommandRegistrationCallback.EVENT.register(ModdedCommands::register);
-		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> playerJoin(handler.player));
-		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> playerQuit(handler.player));
-		ServerPlayerEvents.COPY_FROM.register(PowerGridEvents::playerCopy);
-		ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register((player, origin, destination) ->
-				GlobalElectricNetworks.dropTrackers(player, origin.dimension()));
-		UseBlockCallback.EVENT.register((player, level, hand, hit) -> WireItem.useOn(player, hand, hit.getBlockPos(), hit.getDirection()));
-		UseItemCallback.EVENT.register((player, level, hand) -> WireItem.use(player, hand));
-		ServerEntityEvents.ENTITY_UNLOAD.register(BaseWireEntity::entityUnload);
-		ServerChunkEvents.CHUNK_LOAD.register((level, chunk, newlyGenerated) -> chunkLoad(level, chunk.getPos()));
-		ServerChunkEvents.FULL_CHUNK_STATUS_CHANGE.register(PowerGridEvents::chunkStatusChange);
+		bus.addListener((LevelTickEvent.Post event) -> {
+			if (event.getLevel() instanceof ServerLevel level)
+				GlobalElectricNetworks.postTick(level);
+		});
+		bus.addListener((ServerTickEvent.Post event) -> EntityWireInteraction.postTick(event.getServer()));
+		bus.addListener((LevelEvent.Unload event) -> {
+			if (event.getLevel() instanceof ServerLevel level) {
+				PENDING_CHUNK_STATUS.remove(level);
+				GlobalElectricNetworks.unloadWorld(level);
+			}
+		});
+		bus.addListener((RegisterCommandsEvent event) ->
+				ModdedCommands.register(event.getDispatcher(), event.getBuildContext(), event.getCommandSelection()));
+		bus.addListener((PlayerEvent.PlayerLoggedInEvent event) -> {
+			if (event.getEntity() instanceof ServerPlayer player)
+				playerJoin(player);
+		});
+		bus.addListener((PlayerEvent.PlayerLoggedOutEvent event) -> {
+			if (event.getEntity() instanceof ServerPlayer player)
+				playerQuit(player);
+		});
+		bus.addListener((PlayerEvent.Clone event) -> {
+			if (event.getOriginal() instanceof ServerPlayer oldPlayer && event.getEntity() instanceof ServerPlayer newPlayer)
+				playerCopy(oldPlayer, newPlayer, !event.isWasDeath());
+		});
+		bus.addListener((PlayerEvent.PlayerChangedDimensionEvent event) -> {
+			if (event.getEntity() instanceof ServerPlayer player)
+				GlobalElectricNetworks.dropTrackers(player, event.getFrom());
+		});
+		// Fabric's UseBlockCallback / UseItemCallback: a non-PASS result cancels the interaction with that result
+		bus.addListener((PlayerInteractEvent.RightClickBlock event) -> {
+			var result = WireItem.useOn(event.getEntity(), event.getHand(), event.getPos(), event.getFace());
+			if (result != InteractionResult.PASS) {
+				event.setCancellationResult(result);
+				event.setCanceled(true);
+			}
+		});
+		bus.addListener((PlayerInteractEvent.RightClickItem event) -> {
+			var result = WireItem.use(event.getEntity(), event.getHand());
+			if (result != InteractionResult.PASS) {
+				event.setCancellationResult(result);
+				event.setCanceled(true);
+			}
+		});
+		bus.addListener((EntityLeaveLevelEvent event) -> {
+			if (event.getLevel() instanceof ServerLevel level)
+				BaseWireEntity.entityUnload(event.getEntity(), level);
+		});
+		bus.addListener((ChunkEvent.Load event) -> {
+			if (event.getLevel() instanceof ServerLevel level)
+				chunkLoad(level, event.getChunk().getPos());
+		});
+		bus.addListener(PowerGridEvents::chunkStatusChange);
 	}
 
-	private static void chunkStatusChange(ServerLevel level, LevelChunk chunk, FullChunkStatus oldStatus, FullChunkStatus newStatus) {
-		PENDING_CHUNK_STATUS.computeIfAbsent(level, key -> new ArrayList<>())
-				.add(new PendingChunkStatus(chunk, oldStatus, newStatus));
+	private static void chunkStatusChange(ChunkTicketLevelUpdatedEvent event) {
+		var oldStatus = ChunkLevel.fullStatus(event.getOldTicketLevel());
+		var newStatus = ChunkLevel.fullStatus(event.getNewTicketLevel());
+		if (oldStatus == newStatus)
+			return;
+		var pos = ChunkPos.unpack(event.getChunkPos());
+		PENDING_CHUNK_STATUS.computeIfAbsent(event.getLevel(), key -> new ArrayList<>())
+				.add(new PendingChunkStatus(pos, event.getLevel().getChunkSource().getChunkNow(pos.x(), pos.z()), oldStatus, newStatus));
 	}
 
 	private static void drainChunkStatusChanges(ServerLevel level) {
@@ -81,10 +132,13 @@ public class PowerGridEvents {
 		if (pending == null)
 			return;
 		for (var entry : pending) {
-			var pos = entry.chunk().getPos();
+			var pos = entry.pos();
+			var chunk = entry.chunk() != null ? entry.chunk() : level.getChunkSource().getChunkNow(pos.x(), pos.z());
+			if (chunk == null)
+				continue;
 			if (entry.newStatus().isOrAfter(FullChunkStatus.BLOCK_TICKING) && !level.getChunkSource().hasChunk(pos.x(), pos.z()))
 				continue;
-			ElectricBehaviour.handleTicketChange(entry.chunk(), entry.oldStatus(), entry.newStatus());
+			ElectricBehaviour.handleTicketChange(chunk, entry.oldStatus(), entry.newStatus());
 		}
 	}
 

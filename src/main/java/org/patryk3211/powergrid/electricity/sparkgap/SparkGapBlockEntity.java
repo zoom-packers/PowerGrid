@@ -19,8 +19,6 @@ package org.patryk3211.powergrid.electricity.sparkgap;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.CenteredSideValueBoxTransform;
 import com.zurrtum.create.catnip.math.VecHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -114,7 +112,6 @@ public class SparkGapBlockEntity extends ElectricBlockEntity implements SparkSou
         plasmaChannel.setState(tag.getBooleanOr("State", false));
     }
 
-    @Environment(EnvType.CLIENT)
     public void makeSparkSound() {
         Minecraft.getInstance().getSoundManager().play(new HvSparkSoundInstance(this));
     }

@@ -34,3 +34,6 @@ libs
 .testclasspath.txt
 
 logs
+
+# ZP5 NeoForge port
+/build/

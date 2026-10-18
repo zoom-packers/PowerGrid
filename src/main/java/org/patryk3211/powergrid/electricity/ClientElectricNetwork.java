@@ -16,14 +16,11 @@
  */
 package org.patryk3211.powergrid.electricity;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import org.patryk3211.powergrid.electricity.wire.JunctionWireEndpoint;
 import org.patryk3211.powergrid.utility.ClientSideAccess;
 
-@Environment(EnvType.CLIENT)
 public class ClientElectricNetwork extends GlobalElectricNetworks {
     public static ClientWorldNetworks getWorldNetworks() {
         return (ClientWorldNetworks) getWorldNetworks(ClientSideAccess.world());

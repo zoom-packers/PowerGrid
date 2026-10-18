@@ -16,14 +16,14 @@
  */
 package org.patryk3211.powergrid.config;
 
-import net.fabricmc.loader.api.FabricLoader;
+import org.patryk3211.powergrid.neoforge.Platform;
 import com.zurrtum.create.catnip.config.ConfigBase;
 
 public class CServer extends ConfigBase {
     public static final int CONFIG_VERSION = 5;
     public final ConfigInt version = i(CONFIG_VERSION, "configVersion", Comments.version);
 
-    public final CColdSweat coldSweat = FabricLoader.getInstance().isModLoaded("cold_sweat") ? nested(0, CColdSweat::new, Comments.coldSweat) : null;
+    public final CColdSweat coldSweat = Platform.isModLoaded("cold_sweat") ? nested(0, CColdSweat::new, Comments.coldSweat) : null;
     public final CKinetics kinetics = nested(0, CKinetics::new, Comments.kinetics);
     public final CRecipes recipes = nested(0, CRecipes::new, Comments.recipes);
     public final CEquipment equipment = nested(0, CEquipment::new, Comments.equipment);

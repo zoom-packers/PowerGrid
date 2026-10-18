@@ -21,8 +21,6 @@ import com.zurrtum.create.catnip.theme.Color;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBufferRenderState;
 import org.patryk3211.powergrid.compat.sable.SableCompanion;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -47,7 +45,6 @@ import java.util.List;
 import static org.patryk3211.powergrid.electricity.wire.HangingWireRenderer.lodLevel;
 import static org.patryk3211.powergrid.electricity.wire.HangingWireRenderer.useFancyGraphics;
 
-@Environment(EnvType.CLIENT)
 public class CordRenderer<T extends CordEntity, S extends CordRenderState> extends EntityRenderer<T, S> {
     public CordRenderer(EntityRendererProvider.Context ctx) {
         super(ctx);

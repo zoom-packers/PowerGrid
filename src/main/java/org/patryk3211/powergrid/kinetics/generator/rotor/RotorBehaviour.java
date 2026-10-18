@@ -16,11 +16,10 @@
  */
 package org.patryk3211.powergrid.kinetics.generator.rotor;
 
+import org.patryk3211.powergrid.utility.ValueInputs;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import com.zurrtum.create.foundation.blockEntity.behaviour.BehaviourType;
 import org.patryk3211.powergrid.compat.sable.SableCompanion;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -150,7 +149,6 @@ public class RotorBehaviour extends SegmentedBehaviour<RotorBehaviour> implement
         hasSoundSource = false;
     }
 
-    @Environment(EnvType.CLIENT)
     public void tickAudio() {
         if(!isController()) {
             hasSoundSource = false;
@@ -167,7 +165,7 @@ public class RotorBehaviour extends SegmentedBehaviour<RotorBehaviour> implement
     @Override
     public void read(ValueInput compound, boolean clientPacket) {
         super.read(compound, clientPacket);
-        if(compound.contains("AngularVelocity")) {
+        if(ValueInputs.contains(compound, "AngularVelocity")) {
             angularVelocity = compound.getFloatOr("AngularVelocity", 0.0f);
             if(Float.isNaN(angularVelocity))
                 angularVelocity = 0;

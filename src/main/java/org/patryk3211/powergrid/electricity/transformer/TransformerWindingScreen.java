@@ -21,8 +21,6 @@ import com.zurrtum.create.client.foundation.blockEntity.ValueSettingsBoard;
 import com.zurrtum.create.client.foundation.blockEntity.ValueSettingsFormatter;
 import com.zurrtum.create.client.foundation.blockEntity.ValueSettingsScreen;
 import com.zurrtum.create.foundation.blockEntity.behaviour.ValueSettings;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -38,7 +36,6 @@ import org.patryk3211.powergrid.utility.Lang;
 import java.util.List;
 import java.util.function.Supplier;
 
-@Environment(EnvType.CLIENT)
 public class TransformerWindingScreen extends ValueSettingsScreen {
     public static final Identifier CAP_TEXTURE = PowerGrid.texture("gui/brass_cover");
     private static final int TEXTURE_SIZE = 256;

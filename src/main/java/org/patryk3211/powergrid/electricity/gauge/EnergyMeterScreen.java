@@ -21,8 +21,6 @@ import com.zurrtum.create.client.foundation.gui.menu.AbstractSimiContainerScreen
 import com.zurrtum.create.client.foundation.gui.widget.IconButton;
 import com.zurrtum.create.client.foundation.gui.widget.TooltipArea;
 import com.zurrtum.create.foundation.gui.menu.MenuType;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -46,7 +44,6 @@ import java.util.List;
 
 import static org.patryk3211.powergrid.network.packets.EnergyMeterInteractionC2SPacket.Action.*;
 
-@Environment(EnvType.CLIENT)
 public class EnergyMeterScreen extends AbstractSimiContainerScreen<EnergyMeterMenu> {
     private static final Identifier BACKGROUND = PowerGrid.texture("gui/energy_meter");
     private static final int TEXTURE_SIZE = 256;

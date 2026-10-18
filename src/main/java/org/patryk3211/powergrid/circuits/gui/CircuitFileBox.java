@@ -16,8 +16,6 @@
  */
 package org.patryk3211.powergrid.circuits.gui;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import org.patryk3211.powergrid.PowerGrid;
@@ -29,7 +27,6 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 
-@Environment(EnvType.CLIENT)
 public class CircuitFileBox extends EditableScrollBox {
     private int tick;
 

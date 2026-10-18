@@ -16,6 +16,8 @@
  */
 package org.patryk3211.powergrid.kinetics.generator.winding;
 
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Prediction;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
 import com.zurrtum.create.foundation.block.IBE;
@@ -154,7 +156,7 @@ public class WindingBlock extends ElectricBlock implements IBE<WindingBlockEntit
     }
 
     @Override
-    public void playerDestroy(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
+    public void playerDestroy(ServerLevel world, ServerPlayer player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
         super.playerDestroy(world, player, pos, state, blockEntity, tool);
         if(state.getValue(PART) != 1) {
             popResource(world, pos, new ItemStack(AllBlocks.SHAFT));
@@ -405,7 +407,7 @@ public class WindingBlock extends ElectricBlock implements IBE<WindingBlockEntit
 
         if(player != null && !player.isCreative()) {
             Block.getDrops(state.setValue(PART, 1), serverWorld, pos, world.getBlockEntity(pos), player, context.getItemInHand())
-                    .forEach(stack -> player.getInventory().placeItemBackInInventory(stack));
+                    .forEach(stack -> player.getInventory().placeItemBackInInventory(stack, Prediction.SERVER_ONLY));
         }
         state.setValue(PART, 1).spawnAfterBreak(serverWorld, pos, ItemStack.EMPTY, true);
         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
@@ -433,9 +435,9 @@ public class WindingBlock extends ElectricBlock implements IBE<WindingBlockEntit
         walk(world, pos, (pos1, state1) -> {
             if (player != null && !player.isCreative()) {
                 Block.getDrops(state1, serverLevel, pos1, world.getBlockEntity(pos1), player, context.getItemInHand())
-                        .forEach(stack -> player.getInventory().placeItemBackInInventory(stack));
+                        .forEach(stack -> player.getInventory().placeItemBackInInventory(stack, Prediction.SERVER_ONLY));
                 if(pos.equals(pos1) && state1.getValue(PART) != 1) {
-                    player.getInventory().placeItemBackInInventory(new ItemStack(AllBlocks.SHAFT));
+                    player.getInventory().placeItemBackInInventory(new ItemStack(AllBlocks.SHAFT), Prediction.SERVER_ONLY);
                 }
             }
             state1.spawnAfterBreak(serverLevel, pos1, ItemStack.EMPTY, true);

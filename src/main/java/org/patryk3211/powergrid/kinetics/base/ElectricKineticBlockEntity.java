@@ -31,8 +31,6 @@ import org.patryk3211.powergrid.electricity.base.ThermalBehaviour;
 import org.patryk3211.powergrid.electricity.sim.AbstractElectricWire;
 
 import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public abstract class ElectricKineticBlockEntity extends KineticBlockEntity implements IElectricEntity {
     protected ElectricBehaviour electricBehaviour;
@@ -62,7 +60,6 @@ public abstract class ElectricKineticBlockEntity extends KineticBlockEntity impl
 
     }
 
-    @Environment(EnvType.CLIENT)
     public void tickAudio() {
 
     }

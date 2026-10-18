@@ -17,8 +17,6 @@
 package org.patryk3211.powergrid.utility;
 
 import com.zurrtum.create.AllSoundEvents;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -32,7 +30,6 @@ import java.util.function.Consumer;
 
 import static com.zurrtum.create.client.catnip.gui.widget.AbstractSimiWidget.HEADER_RGB;
 
-@Environment(EnvType.CLIENT)
 public class EditableScrollBox extends EditBox {
     protected final List<String> options = new ArrayList<>();
     protected int selectedIndex = -1;

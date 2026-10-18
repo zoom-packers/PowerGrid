@@ -1,7 +1,6 @@
 package org.patryk3211.powergrid.utility;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
+import org.patryk3211.powergrid.neoforge.Platform;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -9,7 +8,7 @@ import java.util.function.Supplier;
 public enum Env {
     CLIENT, SERVER;
 
-    public static final Env CURRENT = FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT ? CLIENT : SERVER;
+    public static final Env CURRENT = Platform.isPhysicalClient() ? CLIENT : SERVER;
 
     public boolean isCurrent() {
         return this == CURRENT;

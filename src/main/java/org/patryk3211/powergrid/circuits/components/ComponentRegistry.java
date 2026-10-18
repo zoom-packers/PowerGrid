@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.circuits.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -85,7 +83,6 @@ public class ComponentRegistry {
         return null;
     }
 
-    @Environment(EnvType.CLIENT)
     public static Item getItem(Component component) {
         if(component == null)
             return null;
@@ -94,7 +91,6 @@ public class ComponentRegistry {
                 .getValue(getId(component)).item();
     }
 
-    @Environment(EnvType.CLIENT)
     public static Component getComponent(Item item) {
         var registry = Minecraft.getInstance().getConnection().registryAccess()
                 .lookupOrThrow(ComponentRegistry.ITEM_REGISTRY_KEY);

@@ -84,20 +84,11 @@ public class PowerGridAdvancement {
         }
     }
 
+    // 26.3: advancements are a datapack registry and Advancement.Builder lost save(Consumer, String) and the
+    // background argument of display(). Power Grid's advancement JSON is pre-generated in src/generated and converted
+    // to 26.3 by tools/data_26_3.py, so the datagen path is not ported.
     public void save(Consumer<AdvancementHolder> t, HolderLookup.Provider registries) {
-        if (parent != null)
-            builder.parent(parent.datagenResult);
-
-        if (pgBuilder.func != null)
-            pgBuilder.icon(pgBuilder.func.apply(registries));
-
-        builder.display(pgBuilder.icon.get().getItem(), Component.translatable(titleKey()),
-                Component.translatable(descriptionKey()).withStyle(s -> s.withColor(0xDBA213)),
-                id.equals("root") ? BACKGROUND : null, pgBuilder.type.type, pgBuilder.type.toast,
-                pgBuilder.type.announce, pgBuilder.type.hide);
-
-        datagenResult = builder.save(t, PowerGrid.asResource(id)
-                .toString());
+        throw new UnsupportedOperationException("Power Grid advancement datagen is not ported to NeoForge 26.3");
     }
 
     public void provideLang(BiConsumer<String, String> consumer) {
@@ -177,7 +168,7 @@ public class PowerGridAdvancement {
         }
 
         public Builder whenBlockPlaced(Block block) {
-            return externalTrigger(ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(block));
+            return externalTrigger(ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(BuiltInRegistries.BLOCK, block));
         }
 
         public Builder whenIconCollected() {

@@ -17,14 +17,11 @@
 package org.patryk3211.powergrid.electricity.wire.powercord;
 
 import com.zurrtum.create.client.catnip.render.SuperByteBufferRenderState;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.patryk3211.powergrid.electricity.wire.WireRenderState;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public class CordRenderState extends WireRenderState {
     public final List<SuperByteBufferRenderState> plugs = new ArrayList<>();
 }

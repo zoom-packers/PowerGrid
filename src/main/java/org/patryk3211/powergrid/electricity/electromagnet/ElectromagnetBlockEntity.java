@@ -19,10 +19,9 @@ package org.patryk3211.powergrid.electricity.electromagnet;
 import com.zurrtum.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import com.zurrtum.create.foundation.recipe.RecipeApplier;
-import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
-import net.fabricmc.fabric.api.transfer.v1.item.base.SingleStackStorage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import team.reborn.energy.api.EnergyStorage;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import com.zurrtum.create.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -86,48 +85,34 @@ public class ElectromagnetBlockEntity extends ElectricBlockEntity implements Mag
         wire = builder.connect(resistance(), builder.terminalNode(0), builder.terminalNode(1));
     }
 
+    // NeoForge: Fabric's SingleStackStorage + ContainerItemContext became ItemAccess.forStack, which edits the stack
+    // in place (energy items keep their Item, only the energy component changes).
     public static int tryTransferPower(TransportedItemStack input, int power, boolean simulate) {
-        return tryTransferPower(new SingleStackStorage() {
-            @Override
-            protected ItemStack getStack() {
-                return input.stack;
-            }
-
-            @Override
-            protected void setStack(ItemStack stack) {
-                input.stack = stack;
-            }
-        }, power, simulate);
+        return tryTransferPower(input.stack, power, simulate);
     }
 
     public static int tryTransferPower(ItemEntity itemEntity, int power, boolean simulate) {
-        return tryTransferPower(new SingleStackStorage() {
-            @Override
-            protected ItemStack getStack() {
-                return itemEntity.getItem();
-            }
-
-            @Override
-            protected void setStack(ItemStack stack) {
-                itemEntity.setItem(stack);
-            }
-        }, power, simulate);
+        var stack = itemEntity.getItem();
+        int transferred = tryTransferPower(stack, power, simulate);
+        if(transferred > 0 && !simulate)
+            itemEntity.setItem(stack.copy());
+        return transferred;
     }
 
-    private static int tryTransferPower(SingleStackStorage storage, int power, boolean simulate) {
-        var context = ContainerItemContext.ofSingleSlot(storage);
-        var itemEnergy = EnergyStorage.ITEM.find(context.getItemVariant().toStack(), context);
+    private static int tryTransferPower(ItemStack stack, int power, boolean simulate) {
+        if (stack.isEmpty()) return 0;
+        var itemEnergy = ItemAccess.forStack(stack).getCapability(Capabilities.Energy.ITEM);
         if (itemEnergy == null) return 0;
-        try (Transaction transaction = Transaction.openOuter()) {
-            long toTransfer = power;
-            long moved;
+        try (Transaction transaction = Transaction.openRoot()) {
+            int toTransfer = power;
+            int moved;
             do {
                 moved = itemEnergy.insert(toTransfer, transaction);
                 toTransfer -= moved;
             } while (!simulate && moved != 0 && toTransfer > 0);
             if (!simulate)
                 transaction.commit();
-            return (int) (power - toTransfer);
+            return power - toTransfer;
         }
     }
 

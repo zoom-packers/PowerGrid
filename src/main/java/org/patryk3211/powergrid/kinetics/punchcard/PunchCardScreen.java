@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.kinetics.punchcard;
 
 import com.zurrtum.create.client.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.zurrtum.create.foundation.gui.menu.MenuType;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
@@ -41,7 +39,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-@Environment(EnvType.CLIENT)
 public class PunchCardScreen extends AbstractSimiContainerScreen<PunchCardMenu> {
     public static final Identifier BACKGROUND = PowerGrid.texture("gui/punch_card_edit");
     public static final int TEXTURE_SIZE = 256;

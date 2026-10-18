@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.electricity.electricswitch;
 
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.foundation.block.IBE;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -129,7 +127,6 @@ public abstract class SwitchBlock extends ElectricBlock implements IBE<SwitchBlo
     }
 
     @Nullable
-    @Environment(EnvType.CLIENT)
     public static Component overlayText(Player player) {
         if(!player.getItemInHand(InteractionHand.MAIN_HAND).is(AllItems.WRENCH))
             return null;

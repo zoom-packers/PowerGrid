@@ -20,8 +20,6 @@ import com.mojang.math.Axis;
 import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import com.zurrtum.create.client.flywheel.lib.model.baked.ItemModelRenderHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ItemModel;
@@ -45,7 +43,6 @@ import org.patryk3211.powergrid.PowerGridClient;
 import java.util.List;
 import java.util.function.Supplier;
 
-@Environment(EnvType.CLIENT)
 public class ElectroZapperModel implements ItemModel {
     public static final Identifier ID = PowerGrid.asResource("model/electrozapper");
     public static final Identifier ITEM_ID = PowerGrid.asResource("item/electrozapper");

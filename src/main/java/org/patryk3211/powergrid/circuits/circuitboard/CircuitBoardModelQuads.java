@@ -16,15 +16,12 @@
  */
 package org.patryk3211.powergrid.circuits.circuitboard;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public class CircuitBoardModelQuads {
     private BlockState state;
     private List<BlockStateModelPart> parts;

@@ -19,8 +19,6 @@ package org.patryk3211.powergrid.electricity.transformer;
 import com.zurrtum.create.client.api.goggles.IHaveGoggleInformation;
 import com.zurrtum.create.content.schematics.requirement.ItemRequirement;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -120,7 +118,6 @@ public abstract class TransformerBlockEntity extends ElectricBlockEntity impleme
         }
     }
 
-    @Environment(EnvType.CLIENT)
     public void tickAudio() {
         SoundScapes.play(SoundScapes.AmbienceGroup.HUM, worldPosition, 1.0f, lastCurrent / 20);
     }

@@ -18,14 +18,11 @@ package org.patryk3211.powergrid.electricity.light.string;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.patryk3211.powergrid.electricity.wire.powercord.CordRenderState;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public class StringLightCordRenderState extends CordRenderState {
     public float power;
     public boolean anyGlow;

@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.electricity.wire;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -37,7 +35,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 public class BlockWireRenderer extends EntityRenderer<BlockWireEntity, BlockWireRenderer.BlockWireRenderState> {
     public BlockWireRenderer(EntityRendererProvider.Context ctx) {
         super(ctx);
@@ -307,7 +304,6 @@ public class BlockWireRenderer extends EntityRenderer<BlockWireEntity, BlockWire
 
     public record Segment(Vec3 start, Direction direction, float length, int light) { }
 
-    @Environment(EnvType.CLIENT)
     public static class BlockWireRenderState extends EntityRenderState {
         public boolean skip = true;
         public Identifier texture;

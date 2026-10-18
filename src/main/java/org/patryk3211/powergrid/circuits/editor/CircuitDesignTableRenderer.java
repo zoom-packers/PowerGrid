@@ -20,8 +20,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import com.zurrtum.create.client.catnip.render.SuperByteBufferRenderState;
 import com.zurrtum.create.client.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer.CrumblingOverlay;
@@ -33,7 +31,6 @@ import org.jetbrains.annotations.Nullable;
 import org.patryk3211.powergrid.collections.ModdedPartialModels;
 import org.patryk3211.powergrid.collections.ModdedRenderLayers;
 
-@Environment(EnvType.CLIENT)
 public class CircuitDesignTableRenderer extends SmartBlockEntityRenderer<CircuitDesignTableBlockEntity, CircuitDesignTableRenderer.CircuitDesignTableRenderState> {
     public CircuitDesignTableRenderer(BlockEntityRendererProvider.Context context) {
         super(context);

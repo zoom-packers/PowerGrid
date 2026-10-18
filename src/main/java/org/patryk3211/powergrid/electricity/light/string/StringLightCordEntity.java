@@ -16,6 +16,7 @@
  */
 package org.patryk3211.powergrid.electricity.light.string;
 
+import org.patryk3211.powergrid.utility.ValueInputs;
 import org.patryk3211.powergrid.compat.sable.SableCompanion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -118,7 +119,7 @@ public class StringLightCordEntity extends CordEntity {
     protected void readAdditionalSaveData(ValueInput nbt) {
         super.readAdditionalSaveData(nbt);
         filamentTemperature = nbt.getFloatOr("Filament", 0.0f);
-        if(nbt.contains("Pattern")) {
+        if(ValueInputs.contains(nbt, "Pattern")) {
             colorPattern = nbt.getIntArray("Pattern").orElse(new int[0]);
             if (colorPattern.length == 0) {
                 colorPattern = null;

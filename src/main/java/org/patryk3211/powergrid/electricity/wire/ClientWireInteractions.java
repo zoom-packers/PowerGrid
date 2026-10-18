@@ -16,11 +16,10 @@
  */
 package org.patryk3211.powergrid.electricity.wire;
 
+import net.minecraft.world.item.component.SwingAnimation;
 import com.mojang.blaze3d.platform.InputConstants;
 import org.patryk3211.powergrid.compat.sable.SableCompanion;
 import com.zurrtum.create.catnip.math.VecHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -42,7 +41,6 @@ import org.patryk3211.powergrid.network.packets.BlockWireCutC2SPacket;
 import org.patryk3211.powergrid.network.packets.CordDetachC2SPacket;
 import org.patryk3211.powergrid.utility.Lang;
 
-@Environment(EnvType.CLIENT)
 public class ClientWireInteractions {
     private static BlockWireEntity currentEntity = null;
     private static int firstSegmentIndex;
@@ -161,7 +159,7 @@ public class ClientWireInteractions {
             return false;
         if(currentEntity != null) {
             client.player.sendOverlayMessage(Lang.translateDirect("message.cut_reset"));
-            client.player.swing(InteractionHand.MAIN_HAND);
+            client.player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, false);
             currentEntity = null;
         }
         return true;

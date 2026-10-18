@@ -20,11 +20,8 @@ import com.zurrtum.create.api.behaviour.display.DisplaySource;
 import com.zurrtum.create.client.content.redstone.displayLink.source.SingleLineDisplaySourceRender;
 import com.zurrtum.create.client.foundation.gui.ModularGuiLineBuilder;
 import com.zurrtum.create.content.redstone.displayLink.DisplayLinkContext;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.patryk3211.powergrid.utility.Lang;
 
-@Environment(EnvType.CLIENT)
 public class ElectricGaugeDisplaySourceRender extends SingleLineDisplaySourceRender {
     @Override
     public void initConfigurationWidgets(DisplaySource source, DisplayLinkContext context, ModularGuiLineBuilder builder, boolean isFirstLine) {

@@ -19,8 +19,6 @@ package org.patryk3211.powergrid.electricity.electricswitch;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import org.patryk3211.powergrid.compat.sable.SableCompanion;
 import com.zurrtum.create.catnip.animation.LerpedFloat;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -299,7 +297,6 @@ public class HvSwitchBlockEntity extends ElectricKineticBlockEntity implements S
         }
     }
 
-    @Environment(EnvType.CLIENT)
     public void makeSparkSound() {
         Minecraft.getInstance().getSoundManager().play(new HvSparkSoundInstance(this));
     }

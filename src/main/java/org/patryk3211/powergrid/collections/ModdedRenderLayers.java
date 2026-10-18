@@ -16,35 +16,33 @@
  */
 package org.patryk3211.powergrid.collections;
 
-import com.mojang.blaze3d.PrimitiveTopology;
-import com.mojang.blaze3d.pipeline.BlendFunction;
-import com.mojang.blaze3d.pipeline.ColorTargetState;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology;
+import com.mojang.renderpearl.api.pipeline.BlendFunction;
+import com.mojang.renderpearl.api.pipeline.ColorTargetState;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import com.zurrtum.create.client.catnip.render.PonderRenderPipelines;
 import com.zurrtum.create.client.foundation.render.CreateRenderTypes;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import org.patryk3211.powergrid.PowerGrid;
+import org.patryk3211.powergrid.neoforge.client.ClientRegistration;
 
-@Environment(EnvType.CLIENT)
 public class ModdedRenderLayers {
-    private static final RenderPipeline COLOR_PIPELINE = RenderPipelines.register(RenderPipeline
+    private static final RenderPipeline COLOR_PIPELINE = register(RenderPipeline
             .builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
             .withLocation(PowerGrid.asResource("pipeline/color"))
             .withCull(false)
             .build());
 
-    private static final RenderPipeline ADDITIVE_COLOR_PIPELINE = RenderPipelines.register(RenderPipeline
+    private static final RenderPipeline ADDITIVE_COLOR_PIPELINE = register(RenderPipeline
             .builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
             .withLocation(PowerGrid.asResource("pipeline/additive_color"))
             .withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE))
             .withCull(false)
             .build());
 
-    private static final RenderPipeline ADDITIVE_CRT_PIPELINE = RenderPipelines.register(RenderPipeline
+    private static final RenderPipeline ADDITIVE_CRT_PIPELINE = register(RenderPipeline
             .builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
             .withLocation(PowerGrid.asResource("pipeline/additive_crt"))
             .withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE))
@@ -64,6 +62,12 @@ public class ModdedRenderLayers {
     private static final RenderType ADDITIVE_CRT = RenderType.create(
             "powergrid_additive_crt",
             RenderSetup.builder(ADDITIVE_CRT_PIPELINE).createRenderSetup());
+
+    // NeoForge: custom pipelines are registered through RegisterRenderPipelinesEvent (vanilla's register is private)
+    private static RenderPipeline register(RenderPipeline pipeline) {
+        ClientRegistration.renderPipeline(pipeline);
+        return pipeline;
+    }
 
     public static RenderType getColor() {
         return COLOR;

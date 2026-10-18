@@ -16,11 +16,7 @@
  */
 package org.patryk3211.powergrid;
 
-import net.fabricmc.fabric.api.client.rendering.v1.PictureInPictureRendererRegistry;
-import org.patryk3211.powergrid.compat.viewer.TallBlockRenderer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
+import org.patryk3211.powergrid.neoforge.Platform;
 import com.zurrtum.create.client.ponder.api.level.PonderLevel;
 import com.zurrtum.create.client.ponder.foundation.PonderIndex;
 import net.minecraft.client.Minecraft;
@@ -50,7 +46,6 @@ import org.patryk3211.powergrid.utility.LevelKind;
 import org.patryk3211.powergrid.utility.PlacementOverlay;
 import org.patryk3211.powergrid.utility.sound.SoundScapes;
 
-@Environment(EnvType.CLIENT)
 public class PowerGridClient {
 	public static final ElectroZapperRenderHandler ELECTRO_ZAPPER_RENDER_HANDLER = new ElectroZapperRenderHandler();
 
@@ -58,7 +53,7 @@ public class PowerGridClient {
 		LevelKind.PONDER = level -> level instanceof PonderLevel;
 		ModdedPartialModels.register();
 		ModdedRenderLayers.register();
-		if(FabricLoader.getInstance().isModLoaded("iris"))
+		if(Platform.isModLoaded("iris"))
 			IrisPipelineCompat.register();
 		ModdedModels.register();
 		ModdedItemModels.register();
@@ -74,7 +69,7 @@ public class PowerGridClient {
 		PlacementOverlay.init();
 		PowerGridClientEvents.register();
 		PonderIndex.addPlugin(new PowerGridPonderPlugin());
-		PictureInPictureRendererRegistry.register(context -> new TallBlockRenderer());
+		// NeoForge: the TallBlockRenderer picture-in-picture renderer only served the Create REI Viewer plugin, which is not ported
 	}
 
 	public static void clientTick(Minecraft client) {

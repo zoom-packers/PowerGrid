@@ -19,8 +19,6 @@ package org.patryk3211.powergrid.collections;
 import com.zurrtum.create.client.AllBlockEntityBehaviours;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.tooltip.GeneratingKineticTooltipBehaviour;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.tooltip.KineticTooltipBehaviour;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
 import org.patryk3211.powergrid.client.tooltip.ModdedTooltipBehaviours;
 import org.patryk3211.powergrid.client.valuebox.ModdedOptionBehaviours;
@@ -28,7 +26,6 @@ import org.patryk3211.powergrid.client.valuebox.ModdedScrollBehaviours;
 import org.patryk3211.powergrid.client.valuebox.ValueBoxTransforms;
 import org.patryk3211.powergrid.utility.Lang;
 
-@Environment(EnvType.CLIENT)
 public class ModdedClientBehaviours {
     public static void register() {
         AllBlockEntityBehaviours.add(ModdedBlockEntities.CARBON_PILE.get(), ModdedScrollBehaviours.Trim::new);

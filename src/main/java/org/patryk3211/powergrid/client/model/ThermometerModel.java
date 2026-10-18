@@ -19,8 +19,6 @@ package org.patryk3211.powergrid.client.model;
 import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.client.catnip.animation.AnimationTickHolder;
 import com.zurrtum.create.client.flywheel.lib.model.baked.ItemModelRenderHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ItemModel;
@@ -43,7 +41,6 @@ import org.patryk3211.powergrid.equipment.thermometer.ThermometerItemRenderer;
 import java.util.List;
 import java.util.function.Supplier;
 
-@Environment(EnvType.CLIENT)
 public class ThermometerModel implements ItemModel {
     public static final Identifier ID = PowerGrid.asResource("model/thermometer");
     public static final Identifier ITEM_ID = PowerGrid.asResource("item/thermometer");

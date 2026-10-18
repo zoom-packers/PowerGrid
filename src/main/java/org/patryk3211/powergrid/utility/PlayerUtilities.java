@@ -17,8 +17,9 @@
 package org.patryk3211.powergrid.utility;
 
 import com.google.common.collect.Sets;
-import net.fabricmc.fabric.api.entity.FakePlayer;
-import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.minecraft.world.level.GameType;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -81,7 +82,9 @@ public class PlayerUtilities {
     }
 
     public static boolean cancelBreak(Level world, BlockPos pos, Player player) {
-        return !PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(world, player, pos, world.getBlockState(pos), world.getBlockEntity(pos));
+        // NeoForge: Fabric's PlayerBlockBreakEvents.BEFORE became NeoForge's BreakBlockEvent (protection mods use it)
+        GameType gameType = player instanceof ServerPlayer serverPlayer ? serverPlayer.gameMode.getGameModeForPlayer() : GameType.SURVIVAL;
+        return CommonHooks.fireBlockBreak(world, gameType, player, pos, world.getBlockState(pos)).isCanceled();
     }
 
     public static float getReachDistance(Player player) {

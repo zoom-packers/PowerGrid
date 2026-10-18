@@ -62,7 +62,7 @@ import org.patryk3211.powergrid.utility.proxy.ProxyProvider;
 import org.patryk3211.powergrid.utility.proxy.TFMGProxy;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import team.reborn.energy.api.EnergyStorage;
+import net.neoforged.neoforge.capabilities.Capabilities;
 
 import java.util.List;
 
@@ -142,8 +142,9 @@ public class DeviceConnectorBlock extends Rotation4ElectricBlock implements IBE<
     }
 
     public static boolean hasEnergyStorage(Level world, BlockPos pos, Direction side) {
-        var storage = EnergyStorage.SIDED.find(world, pos, side);
-        return storage != null && storage.supportsInsertion();
+        var storage = world.getCapability(Capabilities.Energy.BLOCK, pos, side);
+        // NeoForge: EnergyHandler has no supportsInsertion(); any energy handler counts
+        return storage != null;
     }
 
     public static VoxelShape makeCheckShape(Direction side) {

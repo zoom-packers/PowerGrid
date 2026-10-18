@@ -16,15 +16,27 @@
 package org.patryk3211.powergrid.compat;
 
 import com.zurrtum.create.compat.Mods;
-import org.patryk3211.powergrid.compat.fabric.RecipeCommonPlugin;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import org.patryk3211.powergrid.PowerGrid;
 
 public final class CompatMod {
     private CompatMod() {
     }
 
     public static void register() {
-        if (Mods.JEI.isLoaded() || Mods.RRV.isLoaded()) {
-            RecipeCommonPlugin.register();
+        if (Mods.JEI.isLoaded()) {
+            // NeoForge: vanilla 26.x no longer sends recipes to clients. The Fabric build asked Fabric API to sync
+            // Power Grid's recipe serializers for recipe viewers; NeoForge syncs by recipe type.
+            NeoForge.EVENT_BUS.addListener(CompatMod::sendRecipes);
         }
+    }
+
+    private static void sendRecipes(OnDatapackSyncEvent event) {
+        BuiltInRegistries.RECIPE_TYPE.entrySet().forEach(entry -> {
+            if (entry.getKey().identifier().getNamespace().equals(PowerGrid.MOD_ID))
+                event.sendRecipes(entry.getValue());
+        });
     }
 }

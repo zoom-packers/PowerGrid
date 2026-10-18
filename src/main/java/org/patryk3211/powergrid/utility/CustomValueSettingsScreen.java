@@ -21,8 +21,6 @@ import com.zurrtum.create.client.foundation.blockEntity.ValueSettingsBoard;
 import com.zurrtum.create.client.foundation.blockEntity.ValueSettingsFormatter;
 import com.zurrtum.create.client.foundation.blockEntity.ValueSettingsScreen;
 import com.zurrtum.create.foundation.blockEntity.behaviour.ValueSettings;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -32,7 +30,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-@Environment(EnvType.CLIENT)
 public class CustomValueSettingsScreen extends ValueSettingsScreen {
     public static ValueSettingsBoard makeBoard(Component title, int maxValue, int milestoneInterval, List<Component> rows) {
         return new ValueSettingsBoard(title, maxValue, milestoneInterval, rows, new ValueSettingsFormatter(CustomValueSettingsScreen::simpleFormat));

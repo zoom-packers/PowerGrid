@@ -18,8 +18,6 @@ package org.patryk3211.powergrid.client.valuebox;
 
 import com.zurrtum.create.catnip.math.VecHelper;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.CenteredSideValueBoxTransform;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import org.patryk3211.powergrid.electricity.base.SurfaceElectricBlock;
@@ -30,7 +28,6 @@ import org.patryk3211.powergrid.kinetics.motor.ConstantSpeedMotorBlock;
 import org.patryk3211.powergrid.kinetics.plotter.PlotterBlock;
 import org.patryk3211.powergrid.kinetics.rheostat.RheostatBlock;
 
-@Environment(EnvType.CLIENT)
 public class ValueBoxTransforms {
     public static class CarbonPile extends CenteredSideValueBoxTransform {
         public CarbonPile() {

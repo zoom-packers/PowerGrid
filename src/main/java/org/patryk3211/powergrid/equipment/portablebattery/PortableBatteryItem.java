@@ -17,10 +17,9 @@
 package org.patryk3211.powergrid.equipment.portablebattery;
 
 import com.zurrtum.create.AllEnchantments;
-import net.fabricmc.fabric.api.item.v1.EnchantingContext;
-import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import team.reborn.energy.api.EnergyStorage;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.ChatFormatting;
@@ -66,8 +65,14 @@ public class PortableBatteryItem extends Item implements IHaveElectricProperties
         this.blockItem = placeable;
     }
 
+    // NeoForge: Fabric's canBeEnchantedWith covered both the enchanting table and the anvil
     @Override
-    public boolean canBeEnchantedWith(ItemStack stack, Holder<Enchantment> enchantment, EnchantingContext context) {
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+        return enchantment.is(AllEnchantments.CAPACITY);
+    }
+
+    @Override
+    public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
         return enchantment.is(AllEnchantments.CAPACITY);
     }
 
@@ -126,23 +131,23 @@ public class PortableBatteryItem extends Item implements IHaveElectricProperties
         tryTransferPower(heldStack, batteryStack, player);
     }
     public static void tryTransferPower(ItemStack heldStack, ItemStack batteryStack, Player player) {
-        var heldEnergy = EnergyStorage.ITEM.find(heldStack, ContainerItemContext.ofPlayerHand(player, InteractionHand.MAIN_HAND));
-        if (heldEnergy == null || !heldEnergy.supportsInsertion()) return;
+        var heldEnergy = ItemAccess.forPlayerInteraction(player, InteractionHand.MAIN_HAND).getCapability(Capabilities.Energy.ITEM);
+        if (heldEnergy == null) return;
 
-        long maxEnergyDrain = heldEnergy.getCapacity() - heldEnergy.getAmount();
+        int maxEnergyDrain = (int) Math.min(heldEnergy.getCapacityAsLong() - heldEnergy.getAmountAsLong(), Integer.MAX_VALUE);
         if (maxEnergyDrain < 1) return;
 
-        long energyDrain;
-        try (Transaction simulation = Transaction.openOuter()) {
+        int energyDrain;
+        try (Transaction simulation = Transaction.openRoot()) {
             energyDrain = heldEnergy.insert(maxEnergyDrain, simulation);
         }
         if (energyDrain <= 0) return;
 
-        float available = BatteryUtils.drawEnergy(player, (int) Math.min(energyDrain, Integer.MAX_VALUE));
+        float available = BatteryUtils.drawEnergy(player, energyDrain);
         if (available <= 0) return;
 
-        try (Transaction transaction = Transaction.openOuter()) {
-            heldEnergy.insert((long) (available * energyDrain), transaction);
+        try (Transaction transaction = Transaction.openRoot()) {
+            heldEnergy.insert((int) (available * energyDrain), transaction);
             transaction.commit();
         }
     }

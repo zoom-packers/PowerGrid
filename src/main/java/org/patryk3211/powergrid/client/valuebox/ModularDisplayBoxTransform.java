@@ -21,8 +21,6 @@ import com.zurrtum.create.AllItems;
 import com.zurrtum.create.catnip.math.AngleHelper;
 import com.zurrtum.create.client.flywheel.lib.transform.TransformStack;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.ValueBoxTransform;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,7 +33,6 @@ import net.minecraft.world.phys.Vec3;
 import org.patryk3211.powergrid.electricity.modulardisplay.ModularDisplayBlock;
 import org.patryk3211.powergrid.electricity.modulardisplay.ModularDisplayBlockEntity;
 
-@Environment(EnvType.CLIENT)
 public class ModularDisplayBoxTransform extends ValueBoxTransform {
     private final ModularDisplayBlockEntity blockEntity;
 

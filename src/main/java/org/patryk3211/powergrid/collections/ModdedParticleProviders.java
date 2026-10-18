@@ -16,10 +16,7 @@
  */
 package org.patryk3211.powergrid.collections;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleGroupRegistry;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
+import org.patryk3211.powergrid.neoforge.client.ClientRegistration;
 import net.minecraft.client.particle.ParticleRenderType;
 import org.patryk3211.powergrid.electricity.electromagnet.MagnetizationParticle;
 import org.patryk3211.powergrid.electricity.electromagnet.MagnetizationParticleData;
@@ -28,17 +25,14 @@ import org.patryk3211.powergrid.electricity.particles.SparkParticleData;
 import org.patryk3211.powergrid.electricity.particles.ZapParticle;
 import org.patryk3211.powergrid.electricity.particles.ZapParticleGroup;
 
-@Environment(EnvType.CLIENT)
 public class ModdedParticleProviders {
     public static void register() {
-        var registry = ParticleProviderRegistry.getInstance();
-        registry.register(ModdedParticles.MAGNETIZATION,
-                (ParticleProviderRegistry.PendingParticleProvider<MagnetizationParticleData>) MagnetizationParticle.Factory::new);
-        registry.register(ModdedParticles.CUBE_SPARK,
-                (ParticleProviderRegistry.PendingParticleProvider<SparkParticleData>) SparkParticle.Factory::new);
-        registry.register(ModdedParticles.ZAP, new ZapParticle.Factory());
-
-        ParticleGroupRegistry.register(ZapParticleGroup.ZAP, ZapParticleGroup::new);
-        ParticleGroupRegistry.registerOrdering(ParticleRenderType.SINGLE_QUADS, ZapParticleGroup.ZAP);
+        // NeoForge: Fabric's ParticleProviderRegistry / ParticleGroupRegistry became the RegisterParticleProvidersEvent /
+        // RegisterParticleGroupsEvent registrations in ClientRegistration. NeoForge appends a new group to the end of the
+        // render order, which keeps Fabric's "ZAP after SINGLE_QUADS" ordering.
+        ClientRegistration.particleSprites(ModdedParticles.MAGNETIZATION, MagnetizationParticle.Factory::new);
+        ClientRegistration.particleSprites(ModdedParticles.CUBE_SPARK, SparkParticle.Factory::new);
+        ClientRegistration.particleSpecial(ModdedParticles.ZAP, new ZapParticle.Factory());
+        ClientRegistration.particleGroup(ZapParticleGroup.ZAP, ZapParticleGroup::new);
     }
 }
