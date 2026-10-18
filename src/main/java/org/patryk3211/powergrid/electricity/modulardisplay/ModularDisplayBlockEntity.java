@@ -1,11 +1,11 @@
 package org.patryk3211.powergrid.electricity.modulardisplay;
 
+import org.patryk3211.powergrid.utility.ClientSideAccess;
 import net.minecraft.util.Prediction;
 
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -418,16 +418,16 @@ public class ModularDisplayBlockEntity extends ElectricBlockEntity{
     public static Component overlayText(Player player) {
         if(!player.getItemInHand(InteractionHand.MAIN_HAND).is(AllItems.WRENCH))
             return null;
-        HitResult hit = Minecraft.getInstance().hitResult;
+        HitResult hit = ClientSideAccess.getHitResult();
         if(!(hit instanceof BlockHitResult blockHit) || blockHit.getType() == HitResult.Type.MISS)
             return null;
-        var state = Minecraft.getInstance().level.getBlockState(blockHit.getBlockPos());
+        var state = ClientSideAccess.world().getBlockState(blockHit.getBlockPos());
         if(!(state.getBlock() instanceof ModularDisplayBlock displayBlock))
             return null;
 
         Vec3 localHit = hit.getLocation().subtract(Vec3.atLowerCornerOf(blockHit.getBlockPos()));
         int bestSlot = nearestSlot(state, localHit);
-        var be = displayBlock.getBlockEntity(Minecraft.getInstance().level, blockHit.getBlockPos());
+        var be = displayBlock.getBlockEntity(ClientSideAccess.world(), blockHit.getBlockPos());
         if (be == null) return null;
         var removed = be.getRemovedBlankingPage(bestSlot);
 

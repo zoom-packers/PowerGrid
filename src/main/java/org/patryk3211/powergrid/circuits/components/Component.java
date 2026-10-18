@@ -16,9 +16,9 @@
  */
 package org.patryk3211.powergrid.circuits.components;
 
+import org.patryk3211.powergrid.utility.ClientSideAccess;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.nbt.CompoundTag;
@@ -79,12 +79,12 @@ public abstract class Component {
     }
 
     public static void modelChanged(BlockPos pos) {
-        var level = Minecraft.getInstance().level;
+        var level = ClientSideAccess.world();
         if(level == null)
             return;
         if(level.getBlockEntity(pos) instanceof CircuitBoardBlockEntity circuit)
             circuit.quads = null;
-        level.setSectionDirtyWithNeighbors(SectionPos.blockToSectionCoord(pos.getX()),
+        ClientSideAccess.setSectionDirtyWithNeighbors(SectionPos.blockToSectionCoord(pos.getX()),
                 SectionPos.blockToSectionCoord(pos.getY()), SectionPos.blockToSectionCoord(pos.getZ()));
     }
 

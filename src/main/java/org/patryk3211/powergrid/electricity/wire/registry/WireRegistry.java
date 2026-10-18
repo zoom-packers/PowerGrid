@@ -1,6 +1,6 @@
 package org.patryk3211.powergrid.electricity.wire.registry;
 
-import net.minecraft.client.Minecraft;
+import org.patryk3211.powergrid.utility.ClientSideAccess;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -18,7 +18,7 @@ public class WireRegistry {
     public static WireItemEntry forItem(Item item) {
         if(item == null)
             return null;
-        var level = Minecraft.getInstance().level;
+        var level = ClientSideAccess.world();
         if(level == null)
             return null;
         return forItem(level, item);

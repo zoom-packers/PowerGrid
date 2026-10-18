@@ -19,7 +19,7 @@ package org.patryk3211.powergrid.electricity.sparkgap;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import com.zurrtum.create.client.foundation.blockEntity.behaviour.CenteredSideValueBoxTransform;
 import com.zurrtum.create.catnip.math.VecHelper;
-import net.minecraft.client.Minecraft;
+import org.patryk3211.powergrid.client.ClientSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -30,7 +30,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.patryk3211.powergrid.electricity.base.ElectricBlockEntity;
-import org.patryk3211.powergrid.electricity.particles.HvSparkSoundInstance;
 import org.patryk3211.powergrid.electricity.particles.SparkSoundOwner;
 import org.patryk3211.powergrid.electricity.particles.ZapParticleData;
 import org.patryk3211.powergrid.electricity.sim.SwitchedWire;
@@ -113,7 +112,7 @@ public class SparkGapBlockEntity extends ElectricBlockEntity implements SparkSou
     }
 
     public void makeSparkSound() {
-        Minecraft.getInstance().getSoundManager().play(new HvSparkSoundInstance(this));
+        ClientSounds.hvSpark(this);
     }
 
     @Override

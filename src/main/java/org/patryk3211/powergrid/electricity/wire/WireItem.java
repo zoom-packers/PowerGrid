@@ -16,9 +16,9 @@
  */
 package org.patryk3211.powergrid.electricity.wire;
 
+import org.patryk3211.powergrid.utility.ClientSideAccess;
 import org.patryk3211.powergrid.utility.Env;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -348,6 +348,6 @@ public class WireItem extends Item implements IWire {
         var entry = WireRegistry.forItem(stack.getItem());
         if(entry == null)
             return;
-        ElectricPropertiesUtils.modify(WIRE_DISPLAY, stack, Minecraft.getInstance().player, tooltipFlag, components);
+        ElectricPropertiesUtils.modify(WIRE_DISPLAY, stack, ClientSideAccess.player(), tooltipFlag, components);
     }
 }

@@ -16,9 +16,9 @@
  */
 package org.patryk3211.powergrid.equipment.multimeter;
 
+import org.patryk3211.powergrid.utility.ClientSideAccess;
 import com.zurrtum.create.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -100,7 +100,7 @@ public class MultimeterItem extends Item implements IHaveElectricProperties {
     }
 
     private static Vec3 getAttachmentPoint() {
-        var hit = Minecraft.getInstance().hitResult;
+        var hit = ClientSideAccess.getHitResult();
         if(hit == null || hit.getType() != HitResult.Type.ENTITY)
             return null;
         var entityHit = (EntityHitResult) hit;

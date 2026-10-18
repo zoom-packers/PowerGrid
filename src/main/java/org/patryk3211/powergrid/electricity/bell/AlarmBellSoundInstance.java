@@ -24,7 +24,7 @@ import net.minecraft.world.phys.Vec3;
 public class AlarmBellSoundInstance extends AbstractTickableSoundInstance {
     private final AlarmBellBlockEntity be;
 
-    protected AlarmBellSoundInstance(AlarmBellBlockEntity be) {
+    public AlarmBellSoundInstance(AlarmBellBlockEntity be) {
         super(ModdedSoundEvents.ALARM_BELL.getMainEvent(), SoundSource.BLOCKS, be.getLevel().getRandom());
         this.be = be;
 

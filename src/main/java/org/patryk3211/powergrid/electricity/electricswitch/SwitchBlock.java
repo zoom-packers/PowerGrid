@@ -16,10 +16,10 @@
  */
 package org.patryk3211.powergrid.electricity.electricswitch;
 
+import org.patryk3211.powergrid.utility.ClientSideAccess;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.foundation.block.IBE;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -130,13 +130,13 @@ public abstract class SwitchBlock extends ElectricBlock implements IBE<SwitchBlo
     public static Component overlayText(Player player) {
         if(!player.getItemInHand(InteractionHand.MAIN_HAND).is(AllItems.WRENCH))
             return null;
-        HitResult hit = Minecraft.getInstance().hitResult;
+        HitResult hit = ClientSideAccess.getHitResult();
         if(!(hit instanceof BlockHitResult blockHit) || blockHit.getType() == HitResult.Type.MISS)
             return null;
-        var state = Minecraft.getInstance().level.getBlockState(blockHit.getBlockPos());
+        var state = ClientSideAccess.world().getBlockState(blockHit.getBlockPos());
         if(!(state.getBlock() instanceof SwitchBlock switchBlock) || !switchBlock.isButton())
             return null;
-        boolean nc = switchBlock.getBlockEntityOptional(Minecraft.getInstance().level, blockHit.getBlockPos())
+        boolean nc = switchBlock.getBlockEntityOptional(ClientSideAccess.world(), blockHit.getBlockPos())
                 .map(SwitchBlockEntity::isNormallyClosed).orElse(false);
         return Lang.translate("gui.button_overlay.mode")
                 .add(Lang.translate("gui.button_overlay." + (nc ? "nc" : "no"))

@@ -16,9 +16,9 @@
  */
 package org.patryk3211.powergrid.electricity.info;
 
+import org.patryk3211.powergrid.utility.ClientSideAccess;
 import com.zurrtum.create.client.foundation.utility.CreateLang;
 import org.patryk3211.powergrid.utility.Env;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -60,7 +60,7 @@ public class ElectricPropertiesUtils {
         }
 
         if(!properties.alwaysDisplay()) {
-            var shift = Env.CLIENT.getIfCurrent(() -> () -> Minecraft.getInstance().hasShiftDown()).orElse(false);
+            var shift = Env.CLIENT.getIfCurrent(() -> () -> ClientSideAccess.hasShiftDown()).orElse(false);
             if (!hasSummary) {
                 tooltip.add(header(shift));
             }

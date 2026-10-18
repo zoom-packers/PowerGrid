@@ -16,8 +16,7 @@
  */
 package org.patryk3211.powergrid.electricity.bell;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import org.patryk3211.powergrid.client.ClientSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -46,11 +45,10 @@ public class AlarmBellBlockEntity extends ElectricBlockEntity {
 
     public void tickAudio() {
         if(getVolume() > 0 && !hasSoundInstance) {
-            Minecraft.getInstance().getSoundManager().play(new AlarmBellSoundInstance(this));
+            ClientSounds.alarmBell(this);
             hasSoundInstance = true;
         } else if(getVolume() == 0 && hasSoundInstance) {
-            var pos = Vec3.atCenterOf(worldPosition);
-            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(ModdedSoundEvents.ALARM_BELL_END.getMainEvent(), SoundSource.BLOCKS, prevVolume, prevPitch, level.getRandom(), pos.x, pos.y, pos.z));
+            ClientSounds.alarmBellEnd(this, prevVolume, prevPitch);
             hasSoundInstance = false;
         }
         prevVolume = getVolume();

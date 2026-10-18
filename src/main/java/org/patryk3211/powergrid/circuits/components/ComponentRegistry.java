@@ -16,9 +16,9 @@
  */
 package org.patryk3211.powergrid.circuits.components;
 
+import org.patryk3211.powergrid.utility.ClientSideAccess;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -86,13 +86,13 @@ public class ComponentRegistry {
     public static Item getItem(Component component) {
         if(component == null)
             return null;
-        return Minecraft.getInstance().getConnection().registryAccess()
+        return ClientSideAccess.registryAccess()
                 .lookupOrThrow(ITEM_REGISTRY_KEY)
                 .getValue(getId(component)).item();
     }
 
     public static Component getComponent(Item item) {
-        var registry = Minecraft.getInstance().getConnection().registryAccess()
+        var registry = ClientSideAccess.registryAccess()
                 .lookupOrThrow(ComponentRegistry.ITEM_REGISTRY_KEY);
         for(var entry : registry.entrySet()) {
             if(entry.getValue().item() == item)

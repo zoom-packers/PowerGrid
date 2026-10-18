@@ -17,10 +17,16 @@
 package org.patryk3211.powergrid.utility;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 
+/**
+ * The client's state, typed as common classes. Common code reaches the client only through here: the client types
+ * (ClientLevel, LocalPlayer) stay inside this class, so verifying a common class on a dedicated server never loads
+ * them. ZP5 port: callers that read {@code Minecraft.getInstance()} directly crashed the dedicated server.
+ */
 public class ClientSideAccess {
     public static Level world() {
         return Minecraft.getInstance().level;
@@ -32,5 +38,20 @@ public class ClientSideAccess {
 
     public static HitResult getHitResult() {
         return Minecraft.getInstance().hitResult;
+    }
+
+    /** The registries the server sent this client. */
+    public static RegistryAccess registryAccess() {
+        return Minecraft.getInstance().getConnection().registryAccess();
+    }
+
+    public static void setSectionDirtyWithNeighbors(int x, int y, int z) {
+        var level = Minecraft.getInstance().level;
+        if (level != null)
+            level.setSectionDirtyWithNeighbors(x, y, z);
+    }
+
+    public static boolean hasShiftDown() {
+        return Minecraft.getInstance().hasShiftDown();
     }
 }

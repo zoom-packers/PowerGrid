@@ -20,7 +20,7 @@ import org.patryk3211.powergrid.utility.ValueInputs;
 import com.zurrtum.create.foundation.blockEntity.SmartBlockEntity;
 import com.zurrtum.create.foundation.blockEntity.behaviour.BehaviourType;
 import org.patryk3211.powergrid.compat.sable.SableCompanion;
-import net.minecraft.client.Minecraft;
+import org.patryk3211.powergrid.client.ClientSounds;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -155,7 +155,7 @@ public class RotorBehaviour extends SegmentedBehaviour<RotorBehaviour> implement
             return;
         }
         if(!hasSoundSource && Math.abs(angularVelocity) > 32) {
-            Minecraft.getInstance().getSoundManager().play(new RotorSoundInstance(this));
+            ClientSounds.rotor(this);
             hasSoundSource = true;
         } else if(hasSoundSource && Math.abs(angularVelocity) < 32) {
             hasSoundSource = false;
