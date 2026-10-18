@@ -105,6 +105,16 @@ public class FEInverterBlockEntity extends ElectricBlockEntity {
         return (int) storage.amount;
     }
 
+    // NeoForge: the energy capability is only exposed on the facing side, and capability caches (Pipez, AE2) keep a
+    // result until it is invalidated, so a wrench rotation that keeps this block entity must invalidate them
+    @Override
+    public void setBlockState(BlockState state) {
+        var oldFacing = getBlockState().getValue(FEInverterBlock.FACING);
+        super.setBlockState(state);
+        if (state.getValue(FEInverterBlock.FACING) != oldFacing && level != null)
+            invalidateCapabilities();
+    }
+
     public EnergyHandler getEnergyStorage(Direction side) {
         if(side != null && side != getBlockState().getValue(FEInverterBlock.FACING))
             return null;
